@@ -1,0 +1,59 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    background-color: darkslategray;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.sport-kinds-head {
+    background-color: #3669d8;
+    padding: 5px;
+    text-align: center;
+    border-radius: 15px 15px 0 0;
+}
+
+.sport-kinds {
+    background-color: #364668;
+    margin-top: 5px;
+    color: whitesmoke;
+    border-radius: 15px 15px 0 0;
+    
+}
+li {
+    list-style-type: none;
+}
+
+div.left-part {
+    background-color: slategray;
+    margin: 5px;
+
+    
+}
+div.ad {
+    text-align: center;
+    background-color: aqua;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
