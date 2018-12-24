@@ -12,7 +12,8 @@ namespace DataAccess
         public DataAccessRegistry()
         {
             //Scan(
-            //    scan => {
+            //    scan =>
+            //    {
             //        scan.TheCallingAssembly();
             //    });
             For<IDataAccessLayer>().Use<DataAccessLayer>();

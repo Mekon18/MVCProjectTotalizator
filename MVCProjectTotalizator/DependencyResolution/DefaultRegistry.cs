@@ -15,21 +15,36 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace MVCProjectTotalizator.DependencyResolution {
+namespace MVCProjectTotalizator.DependencyResolution
+{
+    using DependencyInjection;
     using StructureMap;
     using StructureMap.Graph;
-	
-    public class DefaultRegistry : Registry {
+    using Microsoft.AspNet.Identity;
+    using MVCProjectTotalizator.Models;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using System.Data.Entity;
+    using Microsoft.Owin.Security;
+    using System.Web;
+    using Business;
+
+    public class DefaultRegistry : Registry
+    {
         #region Constructors and Destructors
 
-        public DefaultRegistry() {
+        public DefaultRegistry()
+        {
             Scan(
-                scan => {
+                scan =>
+                {
                     scan.TheCallingAssembly();
-                    scan.WithDefaultConventions();
-					scan.With(new ControllerConvention());
+                    //scan.WithDefaultConventions();
+                    scan.LookForRegistries();
+                    scan.AssemblyContainingType<MainRegistry>();
                 });
-            //For<IExample>().Use<Example>();
+            For<IUserStore<ApplicationUser>>().Use<UserStore<ApplicationUser>>();
+            For<DbContext>().Use(() => new ApplicationDbContext());
+            For<IAuthenticationManager>().Use(() => HttpContext.Current.GetOwinContext().Authentication);
         }
 
         #endregion

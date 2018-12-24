@@ -15,14 +15,14 @@ namespace DependencyInjection
         public MainRegistry()
         {
             Scan(
-                scan => {
-                    //scan.TheCallingAssembly();
-                    //scan.WithDefaultConventions();
-
+                scan =>
+                {
+                    scan.TheCallingAssembly();
+                    scan.WithDefaultConventions();
+                    scan.LookForRegistries();
                     scan.AssemblyContainingType<BusinessRegistry>();
                     scan.AssemblyContainingType<DataAccessRegistry>();
                 });
-
         }
     }
 }

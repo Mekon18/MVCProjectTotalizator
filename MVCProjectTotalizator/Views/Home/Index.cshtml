@@ -1,8 +1,48 @@
-﻿@{
+﻿@model List<Common.SportEvent>
+@{
     ViewBag.Title = "Home Page";
 }
 
+<div class="col-xs-2 left-part">
+    <div class="sport-kinds">
+        <div class="sport-kinds-head">Виды спорта</div>
+        <ul>
+            <li>Футбол</li>
+            <li>Волейбол</li>
+            <li>Хоккей</li>
+            <li>Теннис</li>
+            <li>Баскетбол</li>
+            <li>Бейсбол</li>
+            <li>Бокс</li>
+        </ul>
+    </div>
 
+    <div class="ad">ваша реклама</div>
+    <div class="ad">ваша реклама</div>
+</div>
+
+<div class="col-xs-8">
+    <div class="sport-kinds">
+        <div class="sport-kinds-head">ближайшие события</div>
+        <table width="100%">
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td align="center">@e.FirstTeam.Name</td>
+                    <td align="center">VS</td>
+                    <td align="center">@e.SecondTeam.Name</td>
+                    <td align="center">|</td>
+                    <td align="center" width="30%">@e.DateTime.Day.@e.DateTime.Month.@e.DateTime.Year @e.DateTime.Hour:@e.DateTime.Minute.ToString("D2")</td>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <td align="center" width="20%">@Html.ActionLink("сделать ставку", "MakeBet",e)</td>
+                    }
+                </tr>
+            }
+        </table>
+        
+    </div>
+</div>
 
 
 

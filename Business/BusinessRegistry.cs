@@ -11,11 +11,14 @@ namespace Business
     {
         public BusinessRegistry()
         {
-            Scan(
-                scan => {
-                    scan.TheCallingAssembly();                    
-                });
-            For<IBusinessLayer>().Use<BusinessLayer>();
+            //For<IBusinessLayer>().Use(() => new BusinessLayer());
+            //For<IBusinessLayer>().Use<BusinessLayer>();
+
+            //Scan(
+            //    scan =>
+            //    {
+            //        scan.TheCallingAssembly();
+            //    });
         }
     }
 }

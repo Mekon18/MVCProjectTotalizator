@@ -1,0 +1,59 @@
+﻿@model Common.SportEvent
+
+@{
+    ViewBag.Title = "MakeBet";
+}
+<script>
+    function teamChanged(control) {
+        var obj = {
+            FirstTeam: { Id: '@Model.FirstTeam.Id', Coef: @Model.FirstCoeficient.ReplaceSeporator() },
+            SecondTeam: { Id: '@Model.SecondTeam.Id', Coef: @Model.SecondCoeficient.ReplaceSeporator() }
+        };
+
+        var cof;
+        if (obj.FirstTeam.Id == control.value) {
+            cof = obj.FirstTeam.Coef;
+        }
+        else {
+            cof = obj.SecondTeam.Coef;
+        }
+
+        $('#coefficient').html("Коэффициент: " + cof);
+    }
+
+    function test()
+    {
+
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 making-bet">
+
+                <span class="making-bet">Команда: </span>
+                <select onchange="teamChanged(this)" name="teamId">
+                    <option value="@Model.FirstTeam.Id">@Model.FirstTeam.Name</option>
+                    <option value="@Model.SecondTeam.Id">@Model.SecondTeam.Name</option>
+                </select>
+
+                <span class="making-bet" id="coefficient">Коэффициент: @Model.FirstCoeficient</span>
+                <br />
+                <span class="making-bet">Ставка: </span>
+                <input type="number" name="money" />
+                <input type="hidden" name="sportEventId" value="@Model.Id" />
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

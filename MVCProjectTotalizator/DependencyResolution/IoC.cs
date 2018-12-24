@@ -25,7 +25,7 @@ namespace MVCProjectTotalizator.DependencyResolution
     {
         public static IContainer Initialize()
         {
-            return new Container(c => c.AddRegistry<MainRegistry>());
+            return new Container(c => c.AddRegistry<DefaultRegistry>());
         }
     }
 }
