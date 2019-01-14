@@ -7,7 +7,7 @@
 
     <ul class="nav navbar-nav navbar-right">
         
-        <li><div style="color: azure; vertical-align:central; padding:15px">Money: @ViewBag.money</div></li>
+        <li><div style="color: azure; vertical-align:central; padding:15px">Money: @ViewBag.Money</div></li>
         <li>
             @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>

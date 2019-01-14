@@ -9,10 +9,10 @@ namespace Common
 {
     public class Rate : Entity
     {
-        public int EventId { get; set; }
+        public SportEvent Event { get; set; }
         public DateTime DateTime { get; set; }
         public string UserId { get; set; }
-        public List<int> BetsId { get; set; }
+        public List<Bet> Bets { get; set; }
     }
     public class SportEvent : Entity
     {
@@ -22,6 +22,8 @@ namespace Common
         public string KindOfSport { get; set; }
         public double FirstCoeficient { get; set; }
         public double SecondCoeficient { get; set; }
+        public double ThirdCoeficient { get; set; }
+        public double FourthCoeficient { get; set; }
     }
     public class Entity
     {
@@ -34,7 +36,8 @@ namespace Common
     }
     public class Bet : Entity
     {
-        public int TeamId { get; set; } // team you want to win
-        public double Money { get; set; }
+        public string ResultType { get; set; }
+        public string ResultValue { get; set; }
+        public int Money { get; set; }
     }
 }

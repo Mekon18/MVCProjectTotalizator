@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Common.SportEvent>
+
+@{
+    ViewBag.Title = "ShowEvents";
+}
+
+<script>
+    function confirmDelete(id) {
+        var result = confirm("Действительно хотите удалить?");
+        if (result) {
+            $.post("/Event/DeleteEvent/" + id, function () {
+                location.reload();
+            });
+        }
+    }     
+</script>
+<div class="dark-table">
+    <div class="dark-table-head">Все события</div>
+    <table class="table dark-table">
+        <tr>
+            <th rowspan="2" >Время начала</th>
+            <th rowspan="2" >Вид спорта</th>
+            <th rowspan="2" >Первая команда</th>
+            <th rowspan="2" >Вторая команда</th>
+            <th colspan="4">Коэффициенты</th>            
+            <th rowspan="2">
+                <a class="btn btn-default" href="/Event/MakeEvent">Создать</a>
+            </th>
+        </tr>
+
+        <tr>
+            
+            <th> победа 1 команды</th>
+            <th> победа 2 команды</th>
+            <th> на счет</th>
+            <th> на кол-во голов</th>
+            
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DateTime.Day.@item.DateTime.Month.@item.DateTime.Year @item.DateTime.Hour:@item.DateTime.Minute.ToString("D2")</td>
+
+                <td>@Html.DisplayFor(modelItem => item.KindOfSport)</td>
+
+                <td>@item.FirstTeam.Name (@item.FirstTeam.CountryName)</td>
+
+                <td>
+                    @item.SecondTeam.Name (@item.SecondTeam.CountryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstCoeficient)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SecondCoeficient)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThirdCoeficient)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FourthCoeficient)
+                </td>
+                <td>
+                    @Html.ActionLink("Изменить", "EditEvent", new { id = item.Id },new { @class= "btn-sm btn-default" }) 
+                    <a onclick="confirmDelete(@item.Id)" class="btn-sm btn-default">Удалить</a>                    
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

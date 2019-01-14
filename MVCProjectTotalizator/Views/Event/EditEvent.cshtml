@@ -1,0 +1,108 @@
+﻿@model MVCProjectTotalizator.Models.EventViewModel
+
+@{
+    ViewBag.Title = "EditEvent";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h2 class="col-md-offset-2">@Model.SportEvent.FirstTeam.Name VS @Model.SportEvent.SecondTeam.Name</h2>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Команда 1</label>
+            <div class="col-md-10">
+                <select class="form-control" onchange="teamChanged(this)" name="SportEvent.FirstTeam.Id">
+                    @foreach (var team in Model.Teams)
+                    {
+                        if (Model.SportEvent.FirstTeam.Id == team.Id)
+                        {
+                            <option selected="selected" value="@team.Id">@team.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@team.Id">@team.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Команда 2</label>
+            <div class="col-md-10">
+                <select class="form-control" onchange="teamChanged(this)" name="SportEvent.SecondTeam.Id">
+                    @foreach (var team in Model.Teams)
+                    {
+                        if (Model.SportEvent.SecondTeam.Id == team.Id)
+                        {
+                            <option selected="selected" value="@team.Id">@team.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@team.Id">@team.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="col-md-2 control-label">Время начала</label>
+            <div class="col-md-10">
+                <input class="form-control" type="datetime-local" data-val="true" data-val-date="The field DateTime must be a date." data-val-required="Требуется поле DateTime." id="SportEvent_DateTime" name="SportEvent.DateTime" value="@Model.SportEvent.DateTime.Year-@Model.SportEvent.DateTime.Month.ToString("D2")-@(Model.SportEvent.DateTime.Day.ToString("D2"))T@(Model.SportEvent.DateTime.Hour.ToString("D2")):@(Model.SportEvent.DateTime.Minute.ToString("D2"))">
+                @Html.ValidationMessageFor(model => model.SportEvent.DateTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Вид спотра</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SportEvent.KindOfSport, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SportEvent.KindOfSport, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Коэффициент победы 1 команды</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SportEvent.FirstCoeficient, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SportEvent.FirstCoeficient, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Коэффициент победы 2 команды</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SportEvent.SecondCoeficient, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SportEvent.SecondCoeficient, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Коэффициент на счет</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SportEvent.ThirdCoeficient, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SportEvent.ThirdCoeficient, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Коэффициент на кол-во голов</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SportEvent.FourthCoeficient, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SportEvent.FourthCoeficient, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.SportEvent.Id)
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <a href="/Event/ShowEvents" class="btn btn-default">Назад</a>
+                <input type="submit" value="Изменить" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

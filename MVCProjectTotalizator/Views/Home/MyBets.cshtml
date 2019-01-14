@@ -1,0 +1,58 @@
+﻿@model List<Common.Rate>
+@{
+    ViewBag.Title = "Мои ставки";
+}
+<div class="dark-table">
+    <div class="dark-table-head">Мои ставки</div>
+    <table width="100%" class="dark-table">
+        <tr>
+            <th>Команды</th>
+            <th>Спорт</th>
+            <th>Дата матча</th>
+            <th>Ставки</th>
+            <th>Время ставки</th>
+        </tr>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td align="center">@r.Event.FirstTeam.Name VS @r.Event.SecondTeam.Name</td>
+
+                <td align="center" width="10%">@r.Event.KindOfSport</td>
+
+                <td align="center" width="10%">@r.Event.DateTime.Day.@r.Event.DateTime.Month.@r.Event.DateTime.Year @r.Event.DateTime.Hour:@r.Event.DateTime.Minute.ToString("D2")</td>
+
+                <td align="center">
+                    <ul>
+                        @foreach (var bet in r.Bets)
+                        {
+                            if (bet.ResultType == "Team")
+                            {
+                                if (bet.ResultValue == r.Event.FirstTeam.Id.ToString())
+                                {
+                                    <li>Победит команда @r.Event.FirstTeam.Name, на нее поставлено @bet.Money</li>
+                                }
+                                else
+                                {
+                                    <li>Победит команда @r.Event.SecondTeam.Name, на нее поставлено @bet.Money</li>
+                                }
+                            }
+                            if (bet.ResultType == "Score")
+                            {
+                                <li>счет будет @bet.ResultValue, на это поставлено @bet.Money</li>
+                            }
+                            if (bet.ResultType == "Amount")
+                            {
+                                <li>Общее количество забитых голов будет @bet.ResultValue, на это поставлено @bet.Money</li>
+                            }
+                        }
+                    </ul>
+
+                </td>
+
+                <td align="center">@r.DateTime.Day.@r.DateTime.Month.@r.DateTime.Year @r.DateTime.Hour:@r.DateTime.Minute.ToString("D2")</td>
+
+            </tr>
+        }
+    </table>
+</div>
+

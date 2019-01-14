@@ -14,6 +14,17 @@ namespace DataAccess
         void AddSportEvent(SportEvent sportEvent);
         List<SportEvent> GetNearSportEvents();
         int GetUsersMoney(string id);
+        void SetUsersMoney(string id, int money);
         SportEvent GetSportEvent(int id);
+        void AddBets(List<Bet> bets, int RateId);
+        int AddRate(Rate rate);
+        List<Rate> GetUsersRates(string userId);
+        List<Bet> GetBets(int rateId);
+        List<Team> GetAllTeams();
+        List<SportEvent> GetAllSportEvents();
+        void EditEvent(SportEvent sportEvent);
+        void DeleteEvent(int id);
+        void EditTeam(Team team);
+        void DeleteTeam(int id);
     }
 }

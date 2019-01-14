@@ -1,4 +1,4 @@
-﻿@model Common.SportEvent
+﻿@model MVCProjectTotalizator.Models.BetsViewModel
 
 @{
     ViewBag.Title = "MakeBet";
@@ -6,8 +6,8 @@
 <script>
     function teamChanged(control) {
         var obj = {
-            FirstTeam: { Id: '@Model.FirstTeam.Id', Coef: @Model.FirstCoeficient.ReplaceSeporator() },
-            SecondTeam: { Id: '@Model.SecondTeam.Id', Coef: @Model.SecondCoeficient.ReplaceSeporator() }
+            FirstTeam: { Id: '@Model.SportEvent.FirstTeam.Id', Coef: @Model.SportEvent.FirstCoeficient.ReplaceSeporator() },
+            SecondTeam: { Id: '@Model.SportEvent.SecondTeam.Id', Coef: @Model.SportEvent.SecondCoeficient.ReplaceSeporator() }
         };
 
         var cof;
@@ -17,13 +17,76 @@
         else {
             cof = obj.SecondTeam.Coef;
         }
+        var t = $(control).parent().parent();
+        var bets = $("#bets").children();
+        var num = bets.index(t);
+        var selector = "#coefficient" + num.toString();
+        var html = "Коэффициент: " + cof;
+        var s = bets.find(selector);;
+        s.html(html);
+    }
+    var n = 0;
+    function AddBet()
+    {
+        n++;
+        var resultSelect = $("#betTemplate").children("select");
+        resultSelect.attr("name", "Bets[" + n.toString() + "].ResultType");
 
-        $('#coefficient').html("Коэффициент: " + cof);
+        var betbody = $("#betTemplate").children(".bet-body");
+
+        var teamSelect = betbody.children("select");
+        teamSelect.attr("name", "Bets[" + n.toString() + "].ResultValue");
+
+        var moneyInput = betbody.children("#Money");
+        moneyInput.attr("name", "Bets[" + n.toString() + "].Money");
+
+        var coefSpan = betbody.children("#coefficient" + (n - 1));
+        coefSpan.attr("id", "coefficient" + n);
+
+        text = $("#betTemplate").html();
+
+        $("#bets").append("<div id=\"bet" + n.toString() + "\"style=\"margin-top: 5px;\">" + text + "</div>");
     }
 
-    function test()
-    {
+    function ResultChanged(control) {
+        var t = $(control).parent().find(".bet-body");
+        var bets = $("#bets").children();
+        var num = bets.index(t.parent());
 
+        if (control.value == "Team") {
+            var betbody = $("#betTemplate").children(".bet-body");
+
+            var teamSelect = betbody.children("select");
+            teamSelect.attr("name", "Bets[" + num + "].ResultValue");
+
+            var moneyInput = betbody.children("#Money");
+            moneyInput.attr("name", "Bets[" + num + "].Money");            
+
+            text = $("#betTemplate").children(".bet-body").html();
+
+            $(t).replaceWith("<div class=\"bet-body\">" + text + "</div>");
+        }
+        if (control.value == "Score") {
+            var resultInput = $("#ScoreTemplate").children("#Result");
+            resultInput.attr("name", "Bets[" + num + "].ResultValue")
+
+            var moneyInput = $("#ScoreTemplate").children("#Money");
+            moneyInput.attr("name", "Bets[" + num + "].Money");
+
+            var text = $("#ScoreTemplate").html();
+
+            $(t).replaceWith("<div class=\"bet-body\">" + text + "</div>");
+        }
+        if (control.value == "Amount") {
+            var resultInput = $("#AmountTemplate").children("#Result");
+            resultInput.attr("name", "Bets[" + num + "].ResultValue")
+
+            var moneyInput = $("#AmountTemplate").children("#Money");
+            moneyInput.attr("name", "Bets[" + num + "].Money");
+
+            var text = $("#AmountTemplate").html();
+            $(t).replaceWith("<div class=\"bet-body\">" + text + "</div>");
+        }
     }
 </script>
 
@@ -35,25 +98,81 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10 making-bet">
+                <div id="bets">
+                    <div id="bet0">
+                        <select onchange="ResultChanged(this)" name="Bets[0].ResultType">
+                            <option value="Team">поставить на команду</option>
+                            <option value="Score">поставить на счет</option>
+                            <option value="Amount">поставить на количество голов</option>
+                        </select>
+                        <div class="bet-body">
+                            <span class="making-bet">Команда: </span>
+                            <select onchange="teamChanged(this)" name="Bets[0].ResultValue">
+                                <option value="@Model.SportEvent.FirstTeam.Id">@Model.SportEvent.FirstTeam.Name</option>
+                                <option value="@Model.SportEvent.SecondTeam.Id">@Model.SportEvent.SecondTeam.Name</option>
+                            </select>
 
-                <span class="making-bet">Команда: </span>
-                <select onchange="teamChanged(this)" name="teamId">
-                    <option value="@Model.FirstTeam.Id">@Model.FirstTeam.Name</option>
-                    <option value="@Model.SecondTeam.Id">@Model.SecondTeam.Name</option>
-                </select>
+                            <span class="making-bet" id="coefficient0">Коэффициент: @Model.SportEvent.FirstCoeficient</span>
+                            <br />
+                            <span class="making-bet">Ставка: </span>
+                            @Html.EditorFor(m => m.Bets[0].Money)
+                            @*<input type="number" name="money" />*@
+                            <br />
+                        </div>
+                    </div>
+                </div>
 
-                <span class="making-bet" id="coefficient">Коэффициент: @Model.FirstCoeficient</span>
-                <br />
-                <span class="making-bet">Ставка: </span>
-                <input type="number" name="money" />
-                <input type="hidden" name="sportEventId" value="@Model.Id" />
+                <input id="add" type="button" value="Add" class="btn btn-default" onclick="AddBet()" />
+                @Html.HiddenFor(m => m.SportEventId)
+                @*<input type="hidden" name="sportEventId" value="@Model.SportEvent.Id" />*@
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
+<div id="betTemplate" style="display:none;">
+    <select onchange="ResultChanged(this)" name="Bets[0].ResultType">
+        <option value="Team">поставить на команду</option>
+        <option value="Score">поставить на счет</option>
+        <option value="Amount">поставить на количество голов</option>
+    </select>
+    <div class="bet-body">
+        <span class="making-bet">Команда: </span>
+        <select onchange="teamChanged(this)" name="Bets[0].ResultValue">
+            <option value="@Model.SportEvent.FirstTeam.Id">@Model.SportEvent.FirstTeam.Name</option>
+            <option value="@Model.SportEvent.SecondTeam.Id">@Model.SportEvent.SecondTeam.Name</option>
+        </select>
 
+        <span class="making-bet" id="coefficient0">Коэффициент: @Model.SportEvent.FirstCoeficient</span>
+        <br />
+        <span class="making-bet">Ставка: </span>
+        <input id="Money" type="number" name="Bets[0].Money" value="0" />
+        <br />
+    </div>
+</div>
+
+<div id="ScoreTemplate" style="display:none;">
+    <span class="making-bet">Счет: </span>
+    <input id="Result" type="text" name="Bets[0].ResultValue" />
+
+    <span class="making-bet" id="coefficient0">Коэффициент: @Model.SportEvent.ThirdCoeficient</span>
+    <br />
+    <span class="making-bet">Ставка: </span>
+    <input id="Money" type="number" name="Bets[0].Money" />
+    <br />
+</div>
+
+<div id="AmountTemplate" style="display:none;">
+    <span class="making-bet">количество голов: </span>
+    <input id="Result" type="text" name="Bets[0].ResultValue" />
+
+    <span class="making-bet" id="coefficient0">Коэффициент: @Model.SportEvent.FourthCoeficient</span>
+    <br />
+    <span class="making-bet">Ставка: </span>
+    <input id="Money" type="number" name="Bets[0].Money" />
+    <br />
+</div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

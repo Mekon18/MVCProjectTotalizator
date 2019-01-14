@@ -9,36 +9,44 @@ using Business;
 
 namespace MVCProjectTotalizator.Controllers
 {
-    public class BetController : Controller
+    public class BetController : BaseController
     {
-        private IBusinessLayer _businessLayer;
 
-        public BetController(IBusinessLayer businessLayer)
+        public BetController(IBusinessLayer businessLayer) : base(businessLayer)
         {
-            _businessLayer = businessLayer;
         }
 
         // GET: Bet
         [Authorize]
         [HttpGet]
-        public ActionResult MakeBet(SportEvent sportEvent)
+        public ActionResult MakeBet(int sportEventId = 1)
         {
-            var Event = _businessLayer.GetSportEvent(sportEvent.Id);
-
-            return View(Event);
+            User.Identity.GetUserId();
+            ViewBag.Money = _businessLayer.GetUsersMoney(User.Identity.GetUserId());
+            var Event = _businessLayer.GetSportEvent(sportEventId);
+            Models.BetsViewModel betsViewModel = new Models.BetsViewModel() { Bets = new List<Bet>() { new Bet() }, SportEventId = sportEventId, SportEvent = Event };
+            return View(betsViewModel);
         }
         [Authorize]
         [HttpPost]
-        public ActionResult MakeBet(int teamId, double money, int sportEventId)
+        public ActionResult MakeBet(Models.BetsViewModel betsViewModel)
         {
-            var bet = new Bet() { Money = money, TeamId = teamId };
+            int money = 0;
+            foreach (var bet in betsViewModel.Bets)
+            {
+                money += bet.Money;
+            }
+            var userId = User.Identity.GetUserId();
+            _businessLayer.TakeUsersMoney(userId, money);
+
             var rate = new Rate()
             {
-                BetsId = new List<int>(new[] { bet.Id }),
                 DateTime = DateTime.Now,
-                EventId = sportEventId,
-                UserId = User.Identity.GetUserId()
+                Event = new SportEvent() { Id = betsViewModel.SportEventId },
+                UserId = userId
             };
+            _businessLayer.SetBets(rate, betsViewModel.Bets);
+
             return RedirectToAction("Index", "Home");
         }
     }

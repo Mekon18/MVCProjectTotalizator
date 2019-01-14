@@ -13,6 +13,17 @@ namespace Business
         Team GetTeam(int id);
         List<SportEvent> GetNearSportEvents();
         int GetUsersMoney(string id);
-        SportEvent GetSportEvent(int id);
+        void TakeUsersMoney(string userId, int money);
+        SportEvent GetSportEvent(int id);        
+        void SetBets(Rate rate, List<Bet> bets);
+        List<Rate> GetUsersRates(string userId);
+        void GiveUserMoney(string id, int money);
+        List<Team> GetAllTeams();
+        void AddSportEvent(SportEvent sportEvent);
+        List<SportEvent> GetAllSportEvents();
+        void EditEvent(SportEvent sportEvent);
+        void DeleteEvent(int id);
+        void EditTeam(Team team);
+        void DeleteTeam(int id);
     }
 }

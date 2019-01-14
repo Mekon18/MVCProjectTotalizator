@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Common.Team>
+
+@{
+    ViewBag.Title = "ShowTeams";
+}
+
+<script>
+    function confirmDelete(id) {
+        var result = confirm("Действительно хотите удалить?");
+        if (result) {
+            $.post("/Team/DeleteTeam/" + id, function () {
+                location.reload();
+            });
+        }
+    }
+</script>
+
+<div class="dark-table">
+    <div class="dark-table-head">Все события</div>
+    <table class="table dark-table">
+        <tr>
+            <th>Название</th>
+            <th>Страна</th>
+            <th>
+                <a class="btn btn-default" href="/Team/AddTeam">Создать</a>
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountryName)
+                </td>
+                <td>
+                    @Html.ActionLink("Изменить", "EditTeam", new { id = item.Id }, new { @class = "btn-sm btn-default" })
+                    <a class="btn-sm btn-default" onclick="confirmDelete(@item.Id)">Удалить</a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

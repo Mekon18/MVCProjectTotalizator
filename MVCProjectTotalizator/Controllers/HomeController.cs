@@ -6,16 +6,16 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Business;
 using Common;
+using MVCProjectTotalizator.Models;
 
 namespace MVCProjectTotalizator.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private IBusinessLayer _businessLayer;
 
-        public HomeController(IBusinessLayer businessLayer)
+
+        public HomeController(IBusinessLayer businessLayer) : base(businessLayer)
         {
-            _businessLayer = businessLayer;
         }
 
 
@@ -24,8 +24,7 @@ namespace MVCProjectTotalizator.Controllers
             var events = _businessLayer.GetNearSportEvents();
             if (User.Identity.IsAuthenticated)
             {
-                User.Identity.GetUserId();
-                ViewBag.money = _businessLayer.GetUsersMoney(User.Identity.GetUserId());
+                //ViewBag.money = _businessLayer.GetUsersMoney(User.Identity.GetUserId());
             }
             return View(events);
         }
@@ -46,7 +45,21 @@ namespace MVCProjectTotalizator.Controllers
 
         public ActionResult MakeBet(SportEvent sportEvent)
         {
-            return RedirectToAction("MakeBet", "Bet", sportEvent);
+            return RedirectToAction("MakeBet", "Bet", new { sportEventId = sportEvent.Id });
         }
+
+        [Authorize]
+        public ActionResult MyBets()
+        {
+            var userId = User.Identity.GetUserId();
+            ViewBag.money = _businessLayer.GetUsersMoney(userId);
+
+            var rates = _businessLayer.GetUsersRates(userId);
+            return View(rates);
+        }
+
+        
+
+        
     }
 }

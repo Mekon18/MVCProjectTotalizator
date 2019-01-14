@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Business;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -11,16 +12,16 @@ using MVCProjectTotalizator.Models;
 namespace MVCProjectTotalizator.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public ManageController()
+        public ManageController(IBusinessLayer businessLayer) : base(businessLayer)
         {
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IBusinessLayer businessLayer) : base(businessLayer)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -32,9 +33,9 @@ namespace MVCProjectTotalizator.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -333,7 +334,7 @@ namespace MVCProjectTotalizator.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -384,6 +385,6 @@ namespace MVCProjectTotalizator.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }
