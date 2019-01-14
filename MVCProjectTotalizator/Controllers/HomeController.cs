@@ -21,11 +21,7 @@ namespace MVCProjectTotalizator.Controllers
 
         public ActionResult Index()
         {
-            var events = _businessLayer.GetNearSportEvents();
-            if (User.Identity.IsAuthenticated)
-            {
-                //ViewBag.money = _businessLayer.GetUsersMoney(User.Identity.GetUserId());
-            }
+            var events = _businessLayer.GetNearSportEvents();            
             return View(events);
         }
 
@@ -58,8 +54,22 @@ namespace MVCProjectTotalizator.Controllers
             return View(rates);
         }
 
-        
+        [HttpGet]
+        [Authorize]
+        public ActionResult TopUpBalance()
+        {
+            var userid = User.Identity.GetUserId();
+            var money = _businessLayer.GetUsersMoney(userid);
+            return View(money);
+        }
 
-        
+        [HttpPost]
+        [Authorize]
+        public ActionResult TopUpBalance(int money)
+        {
+            var userid = User.Identity.GetUserId();
+            _businessLayer.GiveUserMoney(userid, money);
+            return RedirectToAction("Index");
+        }
     }
 }

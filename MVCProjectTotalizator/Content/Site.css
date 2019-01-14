@@ -86,7 +86,7 @@ div.ad {
     height: 150px;
 }
 
-span.making-bet, label.control-label, h2 {
+span.making-bet, label.control-label, h1, h2, h3, h4, h5, h6 {
     color: whitesmoke;
 }
 

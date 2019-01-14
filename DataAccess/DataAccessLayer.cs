@@ -379,6 +379,143 @@ namespace DataAccess
                 command.ExecuteNonQuery();
             }
         }
+
+        public List<User> GetAllUsers()
+        {
+            List<User> Users = new List<User>();
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "GetAllUsers",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        string id = (string)reader["Id"];
+                        string email = (string)reader["Email"];
+                        string passwordHash = (string)reader["PasswordHash"];
+                        int money = (int)reader["Money"];
+                        string role = GetUsersRole(id);
+
+                        Users.Add(new User() { Id = id, Email = email, Password = passwordHash, Money = money, Role = role });
+                    }
+                }
+                reader.Close();
+            }
+            return Users;
+        }
+
+        public void EditUser(User user)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "EditUser",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", user.Id);
+                command.Parameters.AddWithValue("@email", user.Email);
+                command.Parameters.AddWithValue("@passwordHash", user.Password);
+                command.Parameters.AddWithValue("@money", user.Money);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteUser(string id)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "DeleteUser",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", id);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public User GetUser(string id)
+        {
+            User user = new User() { Id = id };
+
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "GetUser",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows) // если есть данные
+                {
+                    reader.Read();
+                    user.Password = (string)reader["PasswordHash"];
+                    user.Email = (string)reader["Email"];
+                    user.Money = (int)reader["Money"];
+                }
+                reader.Close();
+            }
+            return user;
+        }
+
+        public string GetUsersRole(string id)
+        {
+            string role = "";
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "GetUsersRole",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows) // если есть данные
+                {
+                    reader.Read();
+                    role = (string)reader["Name"];
+                }
+                reader.Close();
+            }
+            return role;
+        }
+
+        public void SetUserRole(string id,string roleId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "SetUserRole",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@userId", id); 
+                command.Parameters.AddWithValue("@roleId", roleId);
+                command.ExecuteNonQuery();
+            }
+        }
+
         #endregion
 
         #region Bets

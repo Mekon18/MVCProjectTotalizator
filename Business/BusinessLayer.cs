@@ -96,7 +96,8 @@ namespace Business
         #region Users
         public void GiveUserMoney(string id, int money)
         {
-            _dataAccessLayer.SetUsersMoney(id, money);
+           var userMoney =_dataAccessLayer.GetUsersMoney(id);
+            _dataAccessLayer.SetUsersMoney(id, userMoney+ money);
         }
 
         public int GetUsersMoney(string id)
@@ -112,6 +113,40 @@ namespace Business
             _dataAccessLayer.SetUsersMoney(userId, userMoney);
         }
 
+        public List<User> GetAllUsers()
+        {
+            return _dataAccessLayer.GetAllUsers();
+        }
+        public void EditUser(User user)
+        {
+            _dataAccessLayer.EditUser(user);
+            SetUserRole(user.Id, user.Role);
+        }
+        public void DeleteUser(string id)
+        {
+            _dataAccessLayer.DeleteUser(id);
+        }
+
+        public User GetUser(string id)
+        {
+            User user =_dataAccessLayer.GetUser(id);
+            user.Role = GetUsersRole(id);
+            return user;
+        }
+        public string GetUsersRole(string id)
+        {
+            return _dataAccessLayer.GetUsersRole(id);
+        }
+
+        public void SetUserRole(string id,string role)
+        {
+            switch(role)
+            {
+                case "Admin": _dataAccessLayer.SetUserRole(id, "3"); break;
+                case "Moderator": _dataAccessLayer.SetUserRole(id, "2"); break;
+                case "User": _dataAccessLayer.SetUserRole(id, "1"); break;
+            }
+        }
 
 
         #endregion

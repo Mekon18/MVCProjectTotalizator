@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "TopUpBalance";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal" style="margin-top:20px;">
+        <div class="form-group">
+            <label class="control-label col-md-2">Добавить сумму</label>
+            <div class="col-md-10">
+                <input class="form-control text-box single-line" name="money" type="number" value="0">
+                @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <a href="/" class="btn btn-default">Назад</a>
+                <input type="submit" value="Добавить" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

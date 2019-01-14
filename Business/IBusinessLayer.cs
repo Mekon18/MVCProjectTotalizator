@@ -25,5 +25,11 @@ namespace Business
         void DeleteEvent(int id);
         void EditTeam(Team team);
         void DeleteTeam(int id);
+        List<User> GetAllUsers();
+        void EditUser(User user);
+        void DeleteUser(string id);
+        User GetUser(string id);
+        string GetUsersRole(string id);
+        void SetUserRole(string id, string role);
     }
 }

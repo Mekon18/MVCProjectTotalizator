@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Common.User>
+
+@{
+    ViewBag.Title = "ShowUsers";
+}
+
+<script>
+    function confirmDelete(id) {
+        var result = confirm("Действительно хотите удалить?");
+        if (result) {
+            $.post("/User/DeleteUser/" + id, function () {
+                location.reload();
+            });
+        }
+    }
+</script>
+<div class="dark-table">
+    <div class="dark-table-head">Все пользователи</div>
+    <table class="table dark-table">
+        <tr>
+            <th>
+                Email
+            </th>
+            <th>
+                Role
+            </th>
+            <th>
+                Money
+            </th>
+            <th>
+                Password
+            </th>
+            <th>
+                @*<a class="btn btn-default" href="/User/AddUser">Добавить</a>*@
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Money)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.ActionLink("Изменить", "EditUser", new { id = item.Id }, new { @class = "btn-sm btn-default" })
+                <a onclick="confirmDelete(@item.Id)" class="btn-sm btn-default">Удалить</a>
+            </td>
+        </tr>
+        }
+
+    </table>
+</div>

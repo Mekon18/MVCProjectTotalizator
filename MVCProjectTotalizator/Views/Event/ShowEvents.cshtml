@@ -12,29 +12,29 @@
                 location.reload();
             });
         }
-    }     
+    }
 </script>
 <div class="dark-table">
     <div class="dark-table-head">Все события</div>
     <table class="table dark-table">
         <tr>
-            <th rowspan="2" >Время начала</th>
-            <th rowspan="2" >Вид спорта</th>
-            <th rowspan="2" >Первая команда</th>
-            <th rowspan="2" >Вторая команда</th>
-            <th colspan="4">Коэффициенты</th>            
+            <th rowspan="2">Время начала</th>
+            <th rowspan="2">Вид спорта</th>
+            <th rowspan="2">Первая команда</th>
+            <th rowspan="2">Вторая команда</th>
+            <th colspan="4">Коэффициенты</th>
             <th rowspan="2">
                 <a class="btn btn-default" href="/Event/MakeEvent">Создать</a>
             </th>
         </tr>
 
         <tr>
-            
+
             <th> победа 1 команды</th>
             <th> победа 2 команды</th>
             <th> на счет</th>
             <th> на кол-во голов</th>
-            
+
         </tr>
 
         @foreach (var item in Model)
@@ -62,8 +62,8 @@
                     @Html.DisplayFor(modelItem => item.FourthCoeficient)
                 </td>
                 <td>
-                    @Html.ActionLink("Изменить", "EditEvent", new { id = item.Id },new { @class= "btn-sm btn-default" }) 
-                    <a onclick="confirmDelete(@item.Id)" class="btn-sm btn-default">Удалить</a>                    
+                    @Html.ActionLink("Изменить", "EditEvent", new { id = item.Id }, new { @class = "btn-sm btn-default" })
+                    <a onclick="confirmDelete(@item.Id)" class="btn-sm btn-default">Удалить</a>
                 </td>
             </tr>
         }
