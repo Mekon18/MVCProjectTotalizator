@@ -148,6 +148,7 @@ namespace DataAccess
                 command.Parameters.AddWithValue("@coef2", sportEvent.SecondCoeficient);
                 command.Parameters.AddWithValue("@coef3", sportEvent.ThirdCoeficient);
                 command.Parameters.AddWithValue("@coef4", sportEvent.FourthCoeficient);
+                command.Parameters.AddWithValue("@status", sportEvent.Status);
                 command.ExecuteNonQuery();
             }
         }
@@ -170,6 +171,7 @@ namespace DataAccess
                 {
                     reader.Read();
                     DateTime date = (DateTime)reader["Date"];
+                    string status = (string)reader["Stasus"];
                     int firstTeamId = (int)reader["FirstTeamId"];
                     int secondTeamId = (int)reader["SecondTeamId"];
                     double coef1 = (double)reader["FirstCoeficient"];
@@ -192,7 +194,8 @@ namespace DataAccess
                         FirstCoeficient = coef1,
                         SecondCoeficient = coef2,
                         ThirdCoeficient = coef3,
-                        FourthCoeficient = coef4
+                        FourthCoeficient = coef4,
+                        Status = status
                     };
                 }
                 reader.Close();
@@ -219,6 +222,7 @@ namespace DataAccess
                     {
                         int id = (int)reader["Id"];
                         DateTime date = (DateTime)reader["Date"];
+                        string status = (string)reader["Status"];
                         int firstTeamId = (int)reader["FirstTeamId"];
                         int secondTeamId = (int)reader["SecondTeamId"];
                         double coef1 = (double)reader["FirstCoeficient"];
@@ -241,7 +245,8 @@ namespace DataAccess
                             FirstCoeficient = coef1,
                             SecondCoeficient = coef2,
                             ThirdCoeficient = coef3,
-                            FourthCoeficient = coef4
+                            FourthCoeficient = coef4,
+                            Status = status
                         });
                     }
                 }
@@ -269,6 +274,7 @@ namespace DataAccess
                     {
                         int id = (int)reader["Id"];
                         DateTime date = (DateTime)reader["Date"];
+                        string status = (string)reader["Status"];
                         int firstTeamId = (int)reader["FirstTeamId"];
                         int secondTeamId = (int)reader["SecondTeamId"];
                         int kindOfSportId = (int)reader["KindOfSportId"];
@@ -277,7 +283,7 @@ namespace DataAccess
                         Team firstTeam = GetTeam(firstTeamId);
                         Team secondTeam = GetTeam(secondTeamId);
 
-                        sportEvents.Add(new SportEvent() { Id = id, DateTime = date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport });
+                        sportEvents.Add(new SportEvent() { Id = id, DateTime = date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport, Status = status });
                     }
                 }
                 reader.Close();
@@ -305,6 +311,7 @@ namespace DataAccess
                     {
                         int id = (int)reader["Id"];
                         DateTime date = (DateTime)reader["Date"];
+                        string status = (string)reader["Status"];
                         int firstTeamId = (int)reader["FirstTeamId"];
                         int secondTeamId = (int)reader["SecondTeamId"];
                         int kindOfSportId = (int)reader["KindOfSportId"];
@@ -313,7 +320,46 @@ namespace DataAccess
                         Team firstTeam = GetTeam(firstTeamId);
                         Team secondTeam = GetTeam(secondTeamId);
 
-                        sportEvents.Add(new SportEvent() { Id = id, DateTime = date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport });
+                        sportEvents.Add(new SportEvent() { Id = id, DateTime = date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport, Status= status });
+                    }
+                }
+                reader.Close();
+            }
+            return sportEvents;
+        }
+
+        public List<SportEvent> SearchSportEvents(string status,DateTime date,int kindId)
+        {
+            List<SportEvent> sportEvents = new List<SportEvent>();
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "SearchSportEvents",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Status", status);
+                command.Parameters.AddWithValue("@date", date);   
+                command.Parameters.AddWithValue("@kindId", kindId);
+
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        int id = (int)reader["Id"];
+                        DateTime Date = (DateTime)reader["Date"];
+                        int firstTeamId = (int)reader["FirstTeamId"];
+                        int secondTeamId = (int)reader["SecondTeamId"];
+                        int kindOfSportId = (int)reader["KindOfSportId"];
+
+                        KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
+                        Team firstTeam = GetTeam(firstTeamId);
+                        Team secondTeam = GetTeam(secondTeamId);
+
+                        sportEvents.Add(new SportEvent() { Id = id, DateTime = Date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport });
                     }
                 }
                 reader.Close();
@@ -334,6 +380,7 @@ namespace DataAccess
                 };
                 command.Parameters.AddWithValue("@Id", sportEvent.Id);
                 command.Parameters.AddWithValue("@date", sportEvent.DateTime);
+                command.Parameters.AddWithValue("@status", sportEvent.Status);
                 command.Parameters.AddWithValue("@kindOfSportId", sportEvent.KindOfSport.Id);
                 command.Parameters.AddWithValue("@teamId1", sportEvent.FirstTeam.Id);
                 command.Parameters.AddWithValue("@teamId2", sportEvent.SecondTeam.Id);
@@ -721,6 +768,7 @@ namespace DataAccess
             }
             return Kind;
         }
+
         public List<KindOfSport> GetAllKindsOfSport()
         {
             List<KindOfSport> Kinds = new List<KindOfSport>();

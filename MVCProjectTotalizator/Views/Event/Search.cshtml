@@ -1,0 +1,80 @@
+﻿@model MVCProjectTotalizator.Models.SearchViewModel
+@{
+    ViewBag.Title = "Поиск";
+}
+
+<h2>Поиск</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="col-md-3">
+        <input class="form-control" type="date" data-val="true" data-val-date="The field DateTime must be a date." data-val-required="Требуется поле DateTime." id="DateTime" name="Date" value="@Model.Date.Year-@Model.Date.Month.ToString("D2")-@(Model.Date.Day.ToString("D2"))">
+    </div>
+
+    <div class="col-md-3">
+        <select class="form-control" name="KindId">
+            <option value="0">Любой</option>
+            @foreach (var kind in Model.KindsOfSport)
+            {
+                if (Model.KindId == kind.Id)
+                {
+                    <option selected="selected" value="@kind.Id">@kind.Name</option>
+                }
+                else
+                {
+                    <option value="@kind.Id">@kind.Name</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <select class="form-control" name="Status">
+            <option value="Coming">Будут</option>
+            @if (Model.Status == "Going")
+            {
+                <option selected="selected" value="Going">Идут</option>
+            }
+            else
+            {
+                <option value="Going">Идут</option>
+            }
+            @if (Model.Status == "Passed")
+            {
+                <option selected="selected" value="Passed">Прошли</option>
+            }
+            else
+            {
+                <option value="Passed">Прошли</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <input type="submit" value="Поиск" class="btn btn-default" />
+    </div>
+
+    if (Model.SportEvents != null)
+    {
+        <div class="dark-table col-md-8">
+            <div class="dark-table-head">Результаты Поиска</div>
+            <table width="100%">
+                @foreach (var e in Model.SportEvents)
+                {
+                    <tr>
+                        <td align="center">@e.KindOfSport.Name</td>
+                        <td align="right" style="border-right:none; padding-right:15px;">@e.FirstTeam.Name (@e.FirstTeam.CountryName)</td>
+                        <td align="center" style="border-right:none; border-left:none">VS</td>
+                        <td align="left" style="border-left:none; padding-left:15px;">@e.SecondTeam.Name (@e.SecondTeam.CountryName)</td>
+                        <td align="center" width="20%">@e.DateTime.Day.@e.DateTime.Month.@e.DateTime.Year @e.DateTime.Hour:@e.DateTime.Minute.ToString("D2")</td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <td align="center" width="20%">@Html.ActionLink("сделать ставку", "MakeBet", e)</td>
+                        }
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+}
+

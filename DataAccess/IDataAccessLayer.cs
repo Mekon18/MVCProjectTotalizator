@@ -35,5 +35,6 @@ namespace DataAccess
         KindOfSport GetKindOfSport(int id);
         List<KindOfSport> GetAllKindsOfSport();
         List<SportEvent> GetNearSportEventsByKindOfSport(int kindId);
+        List<SportEvent> SearchSportEvents(string status, DateTime date, int kindId);
     }
 }

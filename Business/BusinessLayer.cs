@@ -75,6 +75,13 @@ namespace Business
         {
             return _dataAccessLayer.GetNearSportEventsByKindOfSport(kindId);
         }
+
+        public List<SportEvent> SearchSportEvents(string status, DateTime date, int kindId)
+        {
+            if (date == new DateTime(1, 1, 1))
+                date = new DateTime(2000, 1, 1);
+            return _dataAccessLayer.SearchSportEvents(status, date, kindId);
+        }
         #endregion
 
         #region Bets       

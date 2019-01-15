@@ -55,6 +55,16 @@ textarea {
     border-radius: 15px 15px 0 0;
 }
 
+div.dark-table {
+    margin-top: 10px;
+}
+
+.dark-table.col-md-8 {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 5px;
+}
+
 table.dark-table {
     border-collapse: collapse;
 }
@@ -71,7 +81,6 @@ td, th {
 .dark-table-head {
     background-color: #3669d8;
     padding: 5px;
-    margin-top: 5px;
     text-align: center;
     border-radius: 15px 15px 0 0;
     border: 1px solid whitesmoke;

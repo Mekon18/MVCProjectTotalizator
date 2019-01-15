@@ -16,5 +16,6 @@ namespace Common
         public double SecondCoeficient { get; set; }
         public double ThirdCoeficient { get; set; }
         public double FourthCoeficient { get; set; }
+        public string Status { get; set; }
     }
 }

@@ -30,6 +30,7 @@
                     <td align="right" style="border-right:none; padding-right:15px;">@e.FirstTeam.Name (@e.FirstTeam.CountryName)</td >
                     <td align="center" style="border-right:none; border-left:none">VS</td>
                     <td align="left" style="border-left:none; padding-left:15px;">@e.SecondTeam.Name (@e.SecondTeam.CountryName)</td>
+                    <td align="center">@e.Status</td>
                     <td align="center" width="20%">@e.DateTime.Day.@e.DateTime.Month.@e.DateTime.Year @e.DateTime.Hour:@e.DateTime.Minute.ToString("D2")</td>
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -38,7 +39,6 @@
                 </tr>
             }
         </table>
-
     </div>
 </div>
 

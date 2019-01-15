@@ -37,6 +37,12 @@ namespace MVCProjectTotalizator.Controllers
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult MakeEvent(EventViewModel viewModel)
         {
+            if (viewModel.SportEvent.DateTime - DateTime.Now < new TimeSpan(2, 0, 0))
+                viewModel.SportEvent.Status = "Going";
+            if (viewModel.SportEvent.DateTime - DateTime.Now < new TimeSpan(0, 0, 0))
+                viewModel.SportEvent.Status = "Passed";
+            if (viewModel.SportEvent.DateTime - DateTime.Now > new TimeSpan(2, 0, 0))
+                viewModel.SportEvent.Status = "Coming";
             _businessLayer.AddSportEvent(viewModel.SportEvent);
             return RedirectToAction("ShowEvents");
         }
@@ -73,12 +79,17 @@ namespace MVCProjectTotalizator.Controllers
         [HttpGet]
         public ActionResult Search()
         {
-            return View();
+            var kinds = _businessLayer.GetAllKindsOfSport();
+            var viewModel = new SearchViewModel() { KindsOfSport = kinds };
+            return View(viewModel);
         }
         [HttpPost]
-        public ActionResult Search(int id)
+        public ActionResult Search(SearchViewModel viewModel)
         {
-            return View();
+            var kinds = _businessLayer.GetAllKindsOfSport();
+            viewModel.SportEvents = _businessLayer.SearchSportEvents(viewModel.Status, viewModel.Date, viewModel.KindId);
+            viewModel.KindsOfSport = kinds;
+            return View(viewModel);
         }
         #endregion
 
