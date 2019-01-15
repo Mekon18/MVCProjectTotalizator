@@ -6,10 +6,9 @@ using Common;
 
 namespace MVCProjectTotalizator.Models
 {
-    public class EventViewModel
+    public class HomeViewModel
     {
-        public SportEvent SportEvent { get; set; }
-        public List<Team> Teams { get; set; }
+        public List<SportEvent> SportEvents { get; set; }
         public List<KindOfSport> KindsOfSport { get; set; }
     }
 }

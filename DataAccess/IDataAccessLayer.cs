@@ -32,5 +32,8 @@ namespace DataAccess
         User GetUser(string id);
         string GetUsersRole(string id);
         void SetUserRole(string id, string roleId);
+        KindOfSport GetKindOfSport(int id);
+        List<KindOfSport> GetAllKindsOfSport();
+        List<SportEvent> GetNearSportEventsByKindOfSport(int kindId);
     }
 }

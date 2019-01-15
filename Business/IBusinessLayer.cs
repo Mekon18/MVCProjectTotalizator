@@ -31,5 +31,8 @@ namespace Business
         User GetUser(string id);
         string GetUsersRole(string id);
         void SetUserRole(string id, string role);
+        KindOfSport GetKindOfSport(int id);
+        List<KindOfSport> GetAllKindsOfSport();
+        List<SportEvent> GetNearSportEventsByKindOfSport(int kindId);
     }
 }

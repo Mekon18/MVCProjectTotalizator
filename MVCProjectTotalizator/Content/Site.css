@@ -1,7 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
-    background-color: darkslategray;    
+    background-color: darkslategray;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -40,22 +40,32 @@ textarea {
     border-radius: 15px 15px 0 0;
 }
 
+    .sport-kinds a:hover {
+        color: burlywood;
+    }
+
+    .sport-kinds a {
+        color: whitesmoke;
+        text-decoration: none;
+    }
+
 .dark-table {
     background-color: #364668;
-    
     color: whitesmoke;
     border-radius: 15px 15px 0 0;
 }
+
 table.dark-table {
     border-collapse: collapse;
 }
-td,th {
-    border:1px solid whitesmoke;
-    
+
+td, th {
+    border: 1px solid whitesmoke;
 }
+
 .table > tbody > tr > th {
     vertical-align: middle;
-    text-align:center;
+    text-align: center;
 }
 
 .dark-table-head {
@@ -94,6 +104,6 @@ span.making-bet, label.control-label, h1, h2, h3, h4, h5, h6 {
     margin: 5px;
 }
 
-h2.col-md-4{
-    text-align:end
+h2.col-md-4 {
+    text-align: end
 }

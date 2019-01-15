@@ -19,10 +19,26 @@ namespace MVCProjectTotalizator.Controllers
         }
 
 
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    var events = _businessLayer.GetNearSportEvents();           
+        //    return View(events);
+        //}
+
+        public ActionResult Index(int? id)
         {
-            var events = _businessLayer.GetNearSportEvents();            
-            return View(events);
+            List<SportEvent> events;
+            List<KindOfSport> kinds = _businessLayer.GetAllKindsOfSport();
+            if (id == null)
+            {
+                events = _businessLayer.GetNearSportEvents();
+            }
+            else
+            {
+                events = _businessLayer.GetNearSportEventsByKindOfSport(id ?? default(int));
+            }
+            HomeViewModel viewModel = new HomeViewModel() { KindsOfSport = kinds, SportEvents = events };
+            return View(viewModel);
         }
 
         public ActionResult About()

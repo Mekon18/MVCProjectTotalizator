@@ -13,7 +13,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Команда 1</label>
             <div class="col-md-10">
-                <select class="form-control" onchange="teamChanged(this)" name="SportEvent.FirstTeam.Id">
+                <select class="form-control" name="SportEvent.FirstTeam.Id">
                     @foreach (var team in Model.Teams)
                     {
                         <option value="@team.Id">@team.Name</option>
@@ -25,7 +25,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Команда 2</label>
             <div class="col-md-10">
-                <select class="form-control" onchange="teamChanged(this)" name="SportEvent.SecondTeam.Id">
+                <select class="form-control" name="SportEvent.SecondTeam.Id">
                     @foreach (var team in Model.Teams)
                     {
                         <option value="@team.Id">@team.Name</option>
@@ -45,8 +45,12 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Вид спотра</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SportEvent.KindOfSport, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SportEvent.KindOfSport, "", new { @class = "text-danger" })
+                <select class="form-control" name="SportEvent.KindOfSport.Id">
+                    @foreach (var kind in Model.KindsOfSport)
+                    {
+                        <option value="@kind.Id">@kind.Name</option>
+                    }
+                </select>
             </div>
         </div>
 
@@ -85,7 +89,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <a href="/" class="btn btn-default">Назад</a>
+                <a href="/Event/ShowEvents" class="btn btn-default">Назад</a>
                 <input type="submit" value="Создать" class="btn btn-default" />
             </div>
         </div>

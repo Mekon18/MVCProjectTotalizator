@@ -1,34 +1,32 @@
-﻿@model List<Common.SportEvent>
+﻿@model MVCProjectTotalizator.Models.HomeViewModel
 @{
     ViewBag.Title = "Home Page";
 }
 
 <div class="col-xs-2 left-part">
     <div class="sport-kinds">
-        <div class="sport-kinds-head">Виды спорта</div>
+        <div class="sport-kinds-head"><a href="/Home/Index/">Виды спорта</a></div>
         <ul>
-            <li>Футбол</li>
-            <li>Волейбол</li>
-            <li>Хоккей</li>
-            <li>Теннис</li>
-            <li>Баскетбол</li>
-            <li>Бейсбол</li>
-            <li>Бокс</li>
+            @foreach (var k in Model.KindsOfSport)
+            { 
+                <li><a href="/Home/Index/@k.Id">@k.Name</a></li>
+            
+            }
         </ul>
     </div>
 
-    <div class="ad">ваша реклама</div>
-    <div class="ad">ваша реклама</div>
+    @*<div class="ad">ваша реклама</div>
+    <div class="ad">ваша реклама</div>*@
 </div>
 
 <div class="col-xs-8">
     <div class="dark-table">
         <div class="dark-table-head">ближайшие события</div>
         <table width="100%">
-            @foreach (var e in Model)
+            @foreach (var e in Model.SportEvents)
             {
                 <tr>
-                    <td align="center">@e.KindOfSport</td>
+                    <td align="center">@e.KindOfSport.Name</td>
                     <td align="right" style="border-right:none; padding-right:15px;">@e.FirstTeam.Name (@e.FirstTeam.CountryName)</td >
                     <td align="center" style="border-right:none; border-left:none">VS</td>
                     <td align="left" style="border-left:none; padding-left:15px;">@e.SecondTeam.Name (@e.SecondTeam.CountryName)</td>

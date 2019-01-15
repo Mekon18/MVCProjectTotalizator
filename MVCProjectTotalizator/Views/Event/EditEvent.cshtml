@@ -13,7 +13,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Команда 1</label>
             <div class="col-md-10">
-                <select class="form-control" onchange="teamChanged(this)" name="SportEvent.FirstTeam.Id">
+                <select class="form-control" name="SportEvent.FirstTeam.Id">
                     @foreach (var team in Model.Teams)
                     {
                         if (Model.SportEvent.FirstTeam.Id == team.Id)
@@ -32,7 +32,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Команда 2</label>
             <div class="col-md-10">
-                <select class="form-control" onchange="teamChanged(this)" name="SportEvent.SecondTeam.Id">
+                <select class="form-control" name="SportEvent.SecondTeam.Id">
                     @foreach (var team in Model.Teams)
                     {
                         if (Model.SportEvent.SecondTeam.Id == team.Id)
@@ -59,8 +59,19 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Вид спотра</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SportEvent.KindOfSport, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SportEvent.KindOfSport, "", new { @class = "text-danger" })
+                <select class="form-control" name="SportEvent.KindOfSport.Id">
+                    @foreach (var kind in Model.KindsOfSport)
+                    {
+                        if (Model.SportEvent.KindOfSport.Id == kind.Id)
+                        {
+                            <option selected="selected" value="@kind.Id">@kind.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@kind.Id">@kind.Name</option>
+                        }
+                    }
+                </select>
             </div>
         </div>
 

@@ -70,6 +70,11 @@ namespace Business
         {
             _dataAccessLayer.DeleteEvent(id);
         }
+
+        public List<SportEvent> GetNearSportEventsByKindOfSport(int kindId)
+        {
+            return _dataAccessLayer.GetNearSportEventsByKindOfSport(kindId);
+        }
         #endregion
 
         #region Bets       
@@ -96,8 +101,8 @@ namespace Business
         #region Users
         public void GiveUserMoney(string id, int money)
         {
-           var userMoney =_dataAccessLayer.GetUsersMoney(id);
-            _dataAccessLayer.SetUsersMoney(id, userMoney+ money);
+            var userMoney = _dataAccessLayer.GetUsersMoney(id);
+            _dataAccessLayer.SetUsersMoney(id, userMoney + money);
         }
 
         public int GetUsersMoney(string id)
@@ -129,7 +134,7 @@ namespace Business
 
         public User GetUser(string id)
         {
-            User user =_dataAccessLayer.GetUser(id);
+            User user = _dataAccessLayer.GetUser(id);
             user.Role = GetUsersRole(id);
             return user;
         }
@@ -138,9 +143,9 @@ namespace Business
             return _dataAccessLayer.GetUsersRole(id);
         }
 
-        public void SetUserRole(string id,string role)
+        public void SetUserRole(string id, string role)
         {
-            switch(role)
+            switch (role)
             {
                 case "Admin": _dataAccessLayer.SetUserRole(id, "3"); break;
                 case "Moderator": _dataAccessLayer.SetUserRole(id, "2"); break;
@@ -149,6 +154,17 @@ namespace Business
         }
 
 
+        #endregion
+
+        #region Kinds
+        public KindOfSport GetKindOfSport(int id)
+        {
+            return _dataAccessLayer.GetKindOfSport(id);
+        }
+        public List<KindOfSport> GetAllKindsOfSport()
+        {
+            return _dataAccessLayer.GetAllKindsOfSport();
+        }
         #endregion
 
     }

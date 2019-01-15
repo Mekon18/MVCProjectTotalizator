@@ -13,6 +13,8 @@ namespace MVCProjectTotalizator.Controllers
         public EventController(IBusinessLayer businessLayer) : base(businessLayer)
         {
         }
+
+        #region for Admins and Moders
         [HttpGet]
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult ShowEvents()
@@ -25,8 +27,9 @@ namespace MVCProjectTotalizator.Controllers
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult MakeEvent()
         {
+            var kinds = _businessLayer.GetAllKindsOfSport();
             var teams = _businessLayer.GetAllTeams();
-            EventViewModel viewModel = new EventViewModel() { Teams = teams };
+            EventViewModel viewModel = new EventViewModel() { Teams = teams, KindsOfSport = kinds };
             return View(viewModel);
         }
 
@@ -44,7 +47,8 @@ namespace MVCProjectTotalizator.Controllers
         {
             var teams = _businessLayer.GetAllTeams();
             var sportEvent = _businessLayer.GetSportEvent(id);
-            EventViewModel viewModel = new EventViewModel() { Teams = teams, SportEvent = sportEvent };
+            var kinds = _businessLayer.GetAllKindsOfSport();
+            EventViewModel viewModel = new EventViewModel() { Teams = teams, SportEvent = sportEvent, KindsOfSport = kinds };
             return View(viewModel);
         }
 
@@ -62,5 +66,21 @@ namespace MVCProjectTotalizator.Controllers
         {
             _businessLayer.DeleteEvent(id);
         }
+        #endregion
+
+        #region for Guests
+
+        [HttpGet]
+        public ActionResult Search()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Search(int id)
+        {
+            return View();
+        }
+        #endregion
+
     }
 }

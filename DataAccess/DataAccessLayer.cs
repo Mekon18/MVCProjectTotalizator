@@ -141,7 +141,7 @@ namespace DataAccess
                     Connection = connection
                 };
                 command.Parameters.AddWithValue("@date", sportEvent.DateTime);
-                command.Parameters.AddWithValue("@kindOfSport", sportEvent.KindOfSport);
+                command.Parameters.AddWithValue("@kindOfSportId", sportEvent.KindOfSport.Id);
                 command.Parameters.AddWithValue("@teamId1", sportEvent.FirstTeam.Id);
                 command.Parameters.AddWithValue("@teamId2", sportEvent.SecondTeam.Id);
                 command.Parameters.AddWithValue("@coef1", sportEvent.FirstCoeficient);
@@ -172,12 +172,13 @@ namespace DataAccess
                     DateTime date = (DateTime)reader["Date"];
                     int firstTeamId = (int)reader["FirstTeamId"];
                     int secondTeamId = (int)reader["SecondTeamId"];
-                    string kindOfSport = (string)reader["KindOfSport"];
                     double coef1 = (double)reader["FirstCoeficient"];
                     double coef2 = (double)reader["SecondCoeficient"];
                     double coef3 = (double)reader["ThirdCoeficient"];
                     double coef4 = (double)reader["FourthCoeficient"];
+                    int kindOfSportId = (int)reader["KindOfSportId"];
 
+                    KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
                     Team firstTeam = GetTeam(firstTeamId);
                     Team secondTeam = GetTeam(secondTeamId);
 
@@ -220,12 +221,13 @@ namespace DataAccess
                         DateTime date = (DateTime)reader["Date"];
                         int firstTeamId = (int)reader["FirstTeamId"];
                         int secondTeamId = (int)reader["SecondTeamId"];
-                        string kindOfSport = (string)reader["KindOfSport"];
                         double coef1 = (double)reader["FirstCoeficient"];
                         double coef2 = (double)reader["SecondCoeficient"];
                         double coef3 = (double)reader["ThirdCoeficient"];
                         double coef4 = (double)reader["FourthCoeficient"];
+                        int kindOfSportId = (int)reader["KindOfSportId"];
 
+                        KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
                         Team firstTeam = GetTeam(firstTeamId);
                         Team secondTeam = GetTeam(secondTeamId);
 
@@ -269,8 +271,45 @@ namespace DataAccess
                         DateTime date = (DateTime)reader["Date"];
                         int firstTeamId = (int)reader["FirstTeamId"];
                         int secondTeamId = (int)reader["SecondTeamId"];
-                        string kindOfSport = (string)reader["KindOfSport"];
+                        int kindOfSportId = (int)reader["KindOfSportId"];
 
+                        KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
+                        Team firstTeam = GetTeam(firstTeamId);
+                        Team secondTeam = GetTeam(secondTeamId);
+
+                        sportEvents.Add(new SportEvent() { Id = id, DateTime = date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport });
+                    }
+                }
+                reader.Close();
+            }
+            return sportEvents;
+        }
+
+        public List<SportEvent> GetNearSportEventsByKindOfSport(int kindId)
+        {
+            List<SportEvent> sportEvents = new List<SportEvent>();
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "GetNearSportEventsByKindOfSport",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", kindId);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        int id = (int)reader["Id"];
+                        DateTime date = (DateTime)reader["Date"];
+                        int firstTeamId = (int)reader["FirstTeamId"];
+                        int secondTeamId = (int)reader["SecondTeamId"];
+                        int kindOfSportId = (int)reader["KindOfSportId"];
+
+                        KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
                         Team firstTeam = GetTeam(firstTeamId);
                         Team secondTeam = GetTeam(secondTeamId);
 
@@ -295,7 +334,7 @@ namespace DataAccess
                 };
                 command.Parameters.AddWithValue("@Id", sportEvent.Id);
                 command.Parameters.AddWithValue("@date", sportEvent.DateTime);
-                command.Parameters.AddWithValue("@kindOfSport", sportEvent.KindOfSport);
+                command.Parameters.AddWithValue("@kindOfSportId", sportEvent.KindOfSport.Id);
                 command.Parameters.AddWithValue("@teamId1", sportEvent.FirstTeam.Id);
                 command.Parameters.AddWithValue("@teamId2", sportEvent.SecondTeam.Id);
                 command.Parameters.AddWithValue("@coef1", sportEvent.FirstCoeficient);
@@ -498,7 +537,7 @@ namespace DataAccess
             return role;
         }
 
-        public void SetUserRole(string id,string roleId)
+        public void SetUserRole(string id, string roleId)
         {
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
@@ -510,7 +549,7 @@ namespace DataAccess
                     CommandType = System.Data.CommandType.StoredProcedure,
                     Connection = connection
                 };
-                command.Parameters.AddWithValue("@userId", id); 
+                command.Parameters.AddWithValue("@userId", id);
                 command.Parameters.AddWithValue("@roleId", roleId);
                 command.ExecuteNonQuery();
             }
@@ -655,6 +694,61 @@ namespace DataAccess
             }
             return rates;
         }
+        #endregion
+
+        #region kinds
+        public KindOfSport GetKindOfSport(int id)
+        {
+            KindOfSport Kind = new KindOfSport() { Id = id };
+
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "GetKindOfSport",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", id);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows) // если есть данные
+                {
+                    reader.Read();
+                    Kind.Name = (string)reader["Name"];
+                }
+                reader.Close();
+            }
+            return Kind;
+        }
+        public List<KindOfSport> GetAllKindsOfSport()
+        {
+            List<KindOfSport> Kinds = new List<KindOfSport>();
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "GetAllKindsOfSport",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        int id = (int)reader["Id"];
+                        string name = (string)reader["Name"];
+
+                        Kinds.Add(new KindOfSport() { Id = id, Name = name });
+                    }
+                }
+                reader.Close();
+            }
+            return Kinds;
+        }
+        
         #endregion
 
     }
