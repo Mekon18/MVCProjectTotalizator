@@ -11,13 +11,14 @@
             <th>Дата матча</th>
             <th>Ставки</th>
             <th>Время ставки</th>
+            <th></th>
         </tr>
         @foreach (var r in Model)
         {
             <tr>
                 <td align="center">@r.Event.FirstTeam.Name VS @r.Event.SecondTeam.Name</td>
 
-                <td align="center" width="10%">@r.Event.KindOfSport</td>
+                <td align="center" width="10%">@r.Event.KindOfSport.Name</td>
 
                 <td align="center" width="10%">@r.Event.DateTime.Day.@r.Event.DateTime.Month.@r.Event.DateTime.Year @r.Event.DateTime.Hour:@r.Event.DateTime.Minute.ToString("D2")</td>
 
@@ -50,7 +51,7 @@
                 </td>
 
                 <td align="center">@r.DateTime.Day.@r.DateTime.Month.@r.DateTime.Year @r.DateTime.Hour:@r.DateTime.Minute.ToString("D2")</td>
-
+                <td></td>
             </tr>
         }
     </table>

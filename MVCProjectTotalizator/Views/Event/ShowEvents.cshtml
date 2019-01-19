@@ -63,7 +63,7 @@
                 </td>
                 <td>
                     @Html.ActionLink("Изменить", "EditEvent", new { id = item.Id }, new { @class = "btn-sm btn-default" })
-                    <a onclick="confirmDelete(@item.Id)" class="btn-sm btn-default">Удалить</a>
+                    <a onclick="confirmDelete(@item.Id)" href="#" class="btn-sm btn-default">Удалить</a>
                 </td>
             </tr>
         }

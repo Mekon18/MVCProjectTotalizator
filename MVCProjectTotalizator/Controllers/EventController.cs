@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Business;
 using MVCProjectTotalizator.Models;
+using Common;
 
 namespace MVCProjectTotalizator.Controllers
 {
@@ -37,13 +38,13 @@ namespace MVCProjectTotalizator.Controllers
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult MakeEvent(EventViewModel viewModel)
         {
-            if (viewModel.SportEvent.DateTime - DateTime.Now < new TimeSpan(2, 0, 0))
-                viewModel.SportEvent.Status = "Going";
-            if (viewModel.SportEvent.DateTime - DateTime.Now < new TimeSpan(0, 0, 0))
-                viewModel.SportEvent.Status = "Passed";
-            if (viewModel.SportEvent.DateTime - DateTime.Now > new TimeSpan(2, 0, 0))
-                viewModel.SportEvent.Status = "Coming";
+            if (viewModel.SportEvent.DateTime == new DateTime(1, 1, 1))
+            {
+                viewModel.SportEvent.DateTime = new DateTime(2000, 1, 1);
+            }
+            viewModel.SportEvent.Status = GetStatus(viewModel.SportEvent.DateTime);
             _businessLayer.AddSportEvent(viewModel.SportEvent);
+
             return RedirectToAction("ShowEvents");
         }
 
@@ -62,7 +63,13 @@ namespace MVCProjectTotalizator.Controllers
         [Authorize(Roles = "Admin,Moderator")]
         public ActionResult EditEvent(EventViewModel viewModel)
         {
+            if (viewModel.SportEvent.DateTime == new DateTime(1, 1, 1))
+            {
+                viewModel.SportEvent.DateTime = new DateTime(2000, 1, 1);
+            }
+            viewModel.SportEvent.Status = GetStatus(viewModel.SportEvent.DateTime);
             _businessLayer.EditEvent(viewModel.SportEvent);
+
             return RedirectToAction("ShowEvents");
         }
 
@@ -93,5 +100,23 @@ namespace MVCProjectTotalizator.Controllers
         }
         #endregion
 
+
+        public string GetStatus(DateTime date)
+        {
+            var result = "Passed";
+            if (date - DateTime.Now < new TimeSpan(0, 0, 0))
+            {
+                result = "Going";
+            }
+            if (date - DateTime.Now < new TimeSpan(-2, 0, 0))
+            {
+                result = "Passed";
+            }
+            if (date - DateTime.Now > new TimeSpan(0, 0, 0))
+            {
+                result = "Coming";
+            }
+            return result;
+        }
     }
 }

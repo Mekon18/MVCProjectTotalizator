@@ -12,7 +12,7 @@ namespace MVCProjectTotalizator
 {
     public static class CommonExtentions
     {
-        public static string ReplaceSeporator(this double d)
+        public static string ReplaceSeparator(this double d)
         {
             return d.ToString().Replace(",", ".");
         }

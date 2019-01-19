@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using Business.ServiceReference1;
+using Common;
 using DataAccess;
 using System;
 using System.Collections.Generic;
@@ -176,3 +177,5 @@ namespace Business
 
     }
 }
+//Service1Client client = new Service1Client();
+//client.GetData();

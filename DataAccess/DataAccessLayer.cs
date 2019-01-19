@@ -15,6 +15,7 @@ namespace DataAccess
         {
             _connectingString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         }
+
         #region Teams
         public Team GetTeam(int id)
         {
@@ -60,11 +61,12 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        int id = (int)reader["Id"];
-                        string name = (string)reader["Name"];
-                        string country = (string)reader["CountryName"];
-
-                        teams.Add(new Team() { Id = id, Name = name, CountryName = country });
+                        teams.Add(new Team()
+                        {
+                            Id = (int)reader["Id"],
+                            Name = (string)reader["Name"],
+                            CountryName = (string)reader["CountryName"]
+                        });
                     }
                 }
                 reader.Close();
@@ -131,6 +133,7 @@ namespace DataAccess
         #region SportEvents
         public void AddSportEvent(SportEvent sportEvent)
         {
+            UpdateEventsStatus();
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
                 connection.Open();
@@ -155,6 +158,7 @@ namespace DataAccess
 
         public SportEvent GetSportEvent(int id)
         {
+            UpdateEventsStatus();
             SportEvent sportEvent = null;
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
@@ -170,32 +174,18 @@ namespace DataAccess
                 if (reader.HasRows) // если есть данные
                 {
                     reader.Read();
-                    DateTime date = (DateTime)reader["Date"];
-                    string status = (string)reader["Stasus"];
-                    int firstTeamId = (int)reader["FirstTeamId"];
-                    int secondTeamId = (int)reader["SecondTeamId"];
-                    double coef1 = (double)reader["FirstCoeficient"];
-                    double coef2 = (double)reader["SecondCoeficient"];
-                    double coef3 = (double)reader["ThirdCoeficient"];
-                    double coef4 = (double)reader["FourthCoeficient"];
-                    int kindOfSportId = (int)reader["KindOfSportId"];
-
-                    KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
-                    Team firstTeam = GetTeam(firstTeamId);
-                    Team secondTeam = GetTeam(secondTeamId);
-
                     sportEvent = new SportEvent()
                     {
                         Id = id,
-                        DateTime = date,
-                        FirstTeam = firstTeam,
-                        SecondTeam = secondTeam,
-                        KindOfSport = kindOfSport,
-                        FirstCoeficient = coef1,
-                        SecondCoeficient = coef2,
-                        ThirdCoeficient = coef3,
-                        FourthCoeficient = coef4,
-                        Status = status
+                        DateTime = (DateTime)reader["Date"],
+                        FirstTeam = GetTeam((int)reader["FirstTeamId"]),
+                        SecondTeam = GetTeam((int)reader["SecondTeamId"]),
+                        KindOfSport = GetKindOfSport((int)reader["KindOfSportId"]),
+                        FirstCoeficient = (double)reader["FirstCoeficient"],
+                        SecondCoeficient = (double)reader["SecondCoeficient"],
+                        ThirdCoeficient = (double)reader["ThirdCoeficient"],
+                        FourthCoeficient = (double)reader["FourthCoeficient"],
+                        Status = (string)reader["Status"]
                     };
                 }
                 reader.Close();
@@ -205,6 +195,7 @@ namespace DataAccess
 
         public List<SportEvent> GetAllSportEvents()
         {
+            UpdateEventsStatus();
             List<SportEvent> sportEvents = new List<SportEvent>();
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
@@ -220,33 +211,18 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        int id = (int)reader["Id"];
-                        DateTime date = (DateTime)reader["Date"];
-                        string status = (string)reader["Status"];
-                        int firstTeamId = (int)reader["FirstTeamId"];
-                        int secondTeamId = (int)reader["SecondTeamId"];
-                        double coef1 = (double)reader["FirstCoeficient"];
-                        double coef2 = (double)reader["SecondCoeficient"];
-                        double coef3 = (double)reader["ThirdCoeficient"];
-                        double coef4 = (double)reader["FourthCoeficient"];
-                        int kindOfSportId = (int)reader["KindOfSportId"];
-
-                        KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
-                        Team firstTeam = GetTeam(firstTeamId);
-                        Team secondTeam = GetTeam(secondTeamId);
-
                         sportEvents.Add(new SportEvent()
                         {
-                            Id = id,
-                            DateTime = date,
-                            FirstTeam = firstTeam,
-                            SecondTeam = secondTeam,
-                            KindOfSport = kindOfSport,
-                            FirstCoeficient = coef1,
-                            SecondCoeficient = coef2,
-                            ThirdCoeficient = coef3,
-                            FourthCoeficient = coef4,
-                            Status = status
+                            Id = (int)reader["Id"],
+                            DateTime = (DateTime)reader["Date"],
+                            FirstTeam = GetTeam((int)reader["FirstTeamId"]),
+                            SecondTeam = GetTeam((int)reader["SecondTeamId"]),
+                            KindOfSport = GetKindOfSport((int)reader["KindOfSportId"]),
+                            FirstCoeficient = (double)reader["FirstCoeficient"],
+                            SecondCoeficient = (double)reader["SecondCoeficient"],
+                            ThirdCoeficient = (double)reader["ThirdCoeficient"],
+                            FourthCoeficient = (double)reader["FourthCoeficient"],
+                            Status = (string)reader["Status"]
                         });
                     }
                 }
@@ -257,6 +233,7 @@ namespace DataAccess
 
         public List<SportEvent> GetNearSportEvents()
         {
+            UpdateEventsStatus();
             List<SportEvent> sportEvents = new List<SportEvent>();
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
@@ -272,18 +249,15 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        int id = (int)reader["Id"];
-                        DateTime date = (DateTime)reader["Date"];
-                        string status = (string)reader["Status"];
-                        int firstTeamId = (int)reader["FirstTeamId"];
-                        int secondTeamId = (int)reader["SecondTeamId"];
-                        int kindOfSportId = (int)reader["KindOfSportId"];
-
-                        KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
-                        Team firstTeam = GetTeam(firstTeamId);
-                        Team secondTeam = GetTeam(secondTeamId);
-
-                        sportEvents.Add(new SportEvent() { Id = id, DateTime = date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport, Status = status });
+                        sportEvents.Add(new SportEvent()
+                        {
+                            Id = (int)reader["Id"],
+                            DateTime = (DateTime)reader["Date"],
+                            FirstTeam = GetTeam((int)reader["FirstTeamId"]),
+                            SecondTeam = GetTeam((int)reader["SecondTeamId"]),
+                            KindOfSport = GetKindOfSport((int)reader["KindOfSportId"]),
+                            Status = (string)reader["Status"]
+                        });
                     }
                 }
                 reader.Close();
@@ -293,6 +267,7 @@ namespace DataAccess
 
         public List<SportEvent> GetNearSportEventsByKindOfSport(int kindId)
         {
+            UpdateEventsStatus();
             List<SportEvent> sportEvents = new List<SportEvent>();
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
@@ -309,18 +284,19 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        int id = (int)reader["Id"];
-                        DateTime date = (DateTime)reader["Date"];
-                        string status = (string)reader["Status"];
-                        int firstTeamId = (int)reader["FirstTeamId"];
-                        int secondTeamId = (int)reader["SecondTeamId"];
-                        int kindOfSportId = (int)reader["KindOfSportId"];
-
-                        KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
-                        Team firstTeam = GetTeam(firstTeamId);
-                        Team secondTeam = GetTeam(secondTeamId);
-
-                        sportEvents.Add(new SportEvent() { Id = id, DateTime = date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport, Status= status });
+                        sportEvents.Add(new SportEvent()
+                        {
+                            Id = (int)reader["Id"],
+                            DateTime = (DateTime)reader["Date"],
+                            FirstTeam = GetTeam((int)reader["FirstTeamId"]),
+                            SecondTeam = GetTeam((int)reader["SecondTeamId"]),
+                            KindOfSport = GetKindOfSport((int)reader["KindOfSportId"]),
+                            FirstCoeficient = (double)reader["FirstCoeficient"],
+                            SecondCoeficient = (double)reader["SecondCoeficient"],
+                            ThirdCoeficient = (double)reader["ThirdCoeficient"],
+                            FourthCoeficient = (double)reader["FourthCoeficient"],
+                            Status = (string)reader["Status"]
+                        });
                     }
                 }
                 reader.Close();
@@ -328,8 +304,8 @@ namespace DataAccess
             return sportEvents;
         }
 
-        public List<SportEvent> SearchSportEvents(string status,DateTime date,int kindId)
-        {
+        public List<SportEvent> SearchSportEvents(string status, DateTime date, int kindId)
+        {            
             List<SportEvent> sportEvents = new List<SportEvent>();
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
@@ -341,7 +317,7 @@ namespace DataAccess
                     Connection = connection
                 };
                 command.Parameters.AddWithValue("@Status", status);
-                command.Parameters.AddWithValue("@date", date);   
+                command.Parameters.AddWithValue("@date", date);
                 command.Parameters.AddWithValue("@kindId", kindId);
 
                 SqlDataReader reader = command.ExecuteReader();
@@ -349,17 +325,14 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        int id = (int)reader["Id"];
-                        DateTime Date = (DateTime)reader["Date"];
-                        int firstTeamId = (int)reader["FirstTeamId"];
-                        int secondTeamId = (int)reader["SecondTeamId"];
-                        int kindOfSportId = (int)reader["KindOfSportId"];
-
-                        KindOfSport kindOfSport = GetKindOfSport(kindOfSportId);
-                        Team firstTeam = GetTeam(firstTeamId);
-                        Team secondTeam = GetTeam(secondTeamId);
-
-                        sportEvents.Add(new SportEvent() { Id = id, DateTime = Date, FirstTeam = firstTeam, SecondTeam = secondTeam, KindOfSport = kindOfSport });
+                        sportEvents.Add(new SportEvent()
+                        {
+                            Id = (int)reader["Id"],
+                            DateTime = (DateTime)reader["Date"],
+                            FirstTeam = GetTeam((int)reader["FirstTeamId"]),
+                            SecondTeam = GetTeam((int)reader["SecondTeamId"]),
+                            KindOfSport = GetKindOfSport((int)reader["KindOfSportId"])
+                        });
                     }
                 }
                 reader.Close();
@@ -369,6 +342,7 @@ namespace DataAccess
 
         public void EditEvent(SportEvent sportEvent)
         {
+            UpdateEventsStatus();
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
                 connection.Open();
@@ -408,6 +382,42 @@ namespace DataAccess
             }
         }
 
+        public void UpdateEventsStatus()
+        {
+            var comingEvents = SearchSportEvents("Coming", new DateTime(2000, 1, 1), 0);
+            foreach (var comingEvent in comingEvents)
+            {
+                var time = comingEvent.DateTime - DateTime.Now;
+                if (time < new TimeSpan() && time > new TimeSpan(-2, 0, 0))
+                    UpdateEventStatus(comingEvent.Id, "Going");
+                if (time < new TimeSpan(-2, 0, 0))
+                    UpdateEventStatus(comingEvent.Id, "Passed");
+            }
+
+            var goingEvents = SearchSportEvents("Going", new DateTime(2000, 1, 1), 0);
+            foreach (var goingEvent in goingEvents)
+            {
+                if (goingEvent.DateTime - DateTime.Now < new TimeSpan(-2, 0, 0))
+                    UpdateEventStatus(goingEvent.Id, "Passed");
+            }
+        }
+
+        public void UpdateEventStatus(int id, string status)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "UpdateEventStatus",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@status", status);
+                command.ExecuteNonQuery();
+            }
+        }
         #endregion
 
         #region Users
@@ -484,12 +494,15 @@ namespace DataAccess
                     while (reader.Read())
                     {
                         string id = (string)reader["Id"];
-                        string email = (string)reader["Email"];
-                        string passwordHash = (string)reader["PasswordHash"];
-                        int money = (int)reader["Money"];
-                        string role = GetUsersRole(id);
 
-                        Users.Add(new User() { Id = id, Email = email, Password = passwordHash, Money = money, Role = role });
+                        Users.Add(new User()
+                        {
+                            Id = id,
+                            Email = (string)reader["Email"],
+                            Password = (string)reader["PasswordHash"],
+                            Money = (int)reader["Money"],
+                            Role = GetUsersRole(id)
+                        });
                     }
                 }
                 reader.Close();
@@ -662,12 +675,13 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        int id = (int)reader["Id"];
-                        string resultType = ((string)reader["ResultType"]).Trim();
-                        string resultValue = ((string)reader["ResultValue"]).Trim();
-                        int money = (int)reader["Money"];
-
-                        bets.Add(new Bet() { Id = id, ResultType = resultType, ResultValue = resultValue, Money = money });
+                        bets.Add(new Bet()
+                        {
+                            Id = (int)reader["Id"],
+                            ResultType = ((string)reader["ResultType"]).Trim(),
+                            ResultValue = ((string)reader["ResultValue"]).Trim(),
+                            Money = (int)reader["Money"]
+                        });
                     }
                 }
                 reader.Close();
@@ -771,7 +785,7 @@ namespace DataAccess
 
         public List<KindOfSport> GetAllKindsOfSport()
         {
-            List<KindOfSport> Kinds = new List<KindOfSport>();
+            List<KindOfSport> kinds = new List<KindOfSport>();
             using (SqlConnection connection = new SqlConnection(_connectingString))
             {
                 connection.Open();
@@ -786,25 +800,22 @@ namespace DataAccess
                 {
                     while (reader.Read())
                     {
-                        int id = (int)reader["Id"];
-                        string name = (string)reader["Name"];
-
-                        Kinds.Add(new KindOfSport() { Id = id, Name = name });
+                        kinds.Add(new KindOfSport()
+                        {
+                            Id = (int)reader["Id"],
+                            Name = (string)reader["Name"]
+                        });
                     }
                 }
+
+                // Update database events
+
                 reader.Close();
             }
-            return Kinds;
+            return kinds;
         }
-        
+
         #endregion
 
     }
 }
-
-//SqlParameter type = new SqlParameter
-//{
-//    ParameterName = "@type",
-//    Value = bet.ResultType
-//};
-//command.Parameters.AddRange(new[] { type, value, money, rateId });

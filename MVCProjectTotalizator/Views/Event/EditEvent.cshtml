@@ -7,6 +7,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model=>model.SportEvent.Status)
 
     <div class="form-horizontal">
         <h2 class="col-md-offset-2">@Model.SportEvent.FirstTeam.Name VS @Model.SportEvent.SecondTeam.Name</h2>
@@ -80,7 +81,7 @@
             <label class="col-md-2 control-label">Коэффициент победы 1 команды</label>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.SportEvent.FirstCoeficient, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SportEvent.FirstCoeficient, "", new { @class = "text-danger" })
+                @*@Html.ValidationMessageFor(model => model.SportEvent.FirstCoeficient, "", new { @class = "text-danger" })*@
             </div>
         </div>
 
@@ -88,15 +89,15 @@
             <label class="col-md-2 control-label">Коэффициент победы 2 команды</label>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.SportEvent.SecondCoeficient, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SportEvent.SecondCoeficient, "", new { @class = "text-danger" })
+                @*@Html.ValidationMessageFor(model => model.SportEvent.SecondCoeficient, "", new { @class = "text-danger" })*@
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-md-2">Коэффициент на счет</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SportEvent.ThirdCoeficient, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SportEvent.ThirdCoeficient, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.SportEvent.ThirdCoeficient, new { htmlAttributes = new { @class = "form-control", @value="0" } })
+                @*@Html.ValidationMessageFor(model => model.SportEvent.ThirdCoeficient, "", new { @class = "text-danger" })*@
             </div>
         </div>
 
@@ -104,7 +105,7 @@
             <label class="control-label col-md-2">Коэффициент на кол-во голов</label>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.SportEvent.FourthCoeficient, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SportEvent.FourthCoeficient, "", new { @class = "text-danger" })
+                @*@Html.ValidationMessageFor(model => model.SportEvent.FourthCoeficient, "", new { @class = "text-danger" })*@
             </div>
         </div>
 

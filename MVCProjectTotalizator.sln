@@ -6,12 +6,19 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCProjectTotalizator", "MVCProjectTotalizator\MVCProjectTotalizator.csproj", "{1286C7D6-C626-430C-96D1-EDA5FB970226}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{080A4D82-256B-4AE2-90BD-6FD1E954DE57}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6012C831-0501-40EC-B035-085A0CC56A1E} = {6012C831-0501-40EC-B035-085A0CC56A1E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{BFAAD692-5267-472C-9015-BEDFDE02395E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{EC89B567-061D-4837-B128-449C6A1CD4AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyInjection", "DependencyInjection\DependencyInjection.csproj", "{7FE05419-4243-4C3B-9B05-C82F9F4014A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfService1", "WcfService1\WcfService1.csproj", "{6012C831-0501-40EC-B035-085A0CC56A1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{B836E98D-3D5B-4608-B75A-1E1C212F7273}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +46,14 @@ Global
 		{7FE05419-4243-4C3B-9B05-C82F9F4014A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FE05419-4243-4C3B-9B05-C82F9F4014A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FE05419-4243-4C3B-9B05-C82F9F4014A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6012C831-0501-40EC-B035-085A0CC56A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6012C831-0501-40EC-B035-085A0CC56A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6012C831-0501-40EC-B035-085A0CC56A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6012C831-0501-40EC-B035-085A0CC56A1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B836E98D-3D5B-4608-B75A-1E1C212F7273}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B836E98D-3D5B-4608-B75A-1E1C212F7273}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B836E98D-3D5B-4608-B75A-1E1C212F7273}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B836E98D-3D5B-4608-B75A-1E1C212F7273}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

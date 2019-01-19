@@ -22,7 +22,7 @@
 <div class="col-xs-8">
     <div class="dark-table">
         <div class="dark-table-head">ближайшие события</div>
-        <table width="100%">
+        <table width="100%" class="dark-table">
             @foreach (var e in Model.SportEvents)
             {
                 <tr>
@@ -34,7 +34,7 @@
                     <td align="center" width="20%">@e.DateTime.Day.@e.DateTime.Month.@e.DateTime.Year @e.DateTime.Hour:@e.DateTime.Minute.ToString("D2")</td>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <td align="center" width="20%">@Html.ActionLink("сделать ставку", "MakeBet", e)</td>
+                        <td align="center" width="20%">@Html.ActionLink("сделать ставку", "MakeBet", e,new { @class="notbtn"})</td>
                     }
                 </tr>
             }

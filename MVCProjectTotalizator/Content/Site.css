@@ -55,6 +55,16 @@ textarea {
     border-radius: 15px 15px 0 0;
 }
 
+a, .btn-link {
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+    a:hover, .btn-link:hover {
+        color: burlywood;
+        text-decoration: none;
+    }
+
 div.dark-table {
     margin-top: 10px;
 }
@@ -84,12 +94,16 @@ td, th {
     text-align: center;
     border-radius: 15px 15px 0 0;
     border: 1px solid whitesmoke;
-    border-bottom: none;
 }
 
 
 li {
     list-style-type: none;
+}
+
+.sport-kinds ul {
+    padding-left: 0px;
+    text-align: center;
 }
 
 div.left-part {
@@ -116,3 +130,36 @@ span.making-bet, label.control-label, h1, h2, h3, h4, h5, h6 {
 h2.col-md-4 {
     text-align: end
 }
+
+dl {
+    color: whitesmoke;
+}
+
+.bet-delete {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: aqua;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#stick1, #stick2 {
+    display:block;
+    margin-left: 2px;
+    width: 14px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: black;
+    transform-origin: center;    
+}
+
+#stick1 {
+    transform: rotate(45deg);
+    margin-top: 8px;
+}
+
+#stick2 {
+    transform: translateY(-2px) rotate(-45deg);
+}
+
