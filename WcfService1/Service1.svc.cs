@@ -4,7 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using System.Text;
+using System.Drawing;
+using System.IO;
 
 namespace WcfService1
 {
@@ -15,6 +16,17 @@ namespace WcfService1
         public string GetData(int value)
         {
             return string.Format("You entered: {0}", value);
+        }
+
+        public Stream GetImage()
+        {
+            var ms = new MemoryStream();
+            string apPath = System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath;
+            var jpg = Image.FromFile(Path.Combine(apPath, "Ставки.jpg"));
+            jpg.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            
+            ms.Position = 0;
+            return ms;
         }
 
         public CompositeType GetDataUsingDataContract(CompositeType composite)

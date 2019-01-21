@@ -1,11 +1,12 @@
-﻿using Business.ServiceReference1;
-using Common;
+﻿using Common;
 using DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Business.ServiceReference1;
+using System.Drawing;
 
 namespace Business
 {
@@ -91,6 +92,29 @@ namespace Business
             int rateId = _dataAccessLayer.AddRate(rate);
             _dataAccessLayer.AddBets(bets, rateId);
         }
+
+        public void AddBets(List<Bet> bets, int rateId)
+        {
+            _dataAccessLayer.AddBets(bets, rateId);
+        }
+
+        public List<Bet> GetBets(int rateId)
+        {
+            return _dataAccessLayer.GetBets(rateId);
+        }
+
+        public void EditBets(List<Bet> bets)
+        {
+            foreach (var bet in bets)
+            {
+                _dataAccessLayer.EditBet(bet);
+            }
+        }
+
+        public void DeleteBet(int betId)
+        {
+            _dataAccessLayer.DeleteBet(betId);
+        }
         #endregion
 
         #region Rates    
@@ -103,6 +127,16 @@ namespace Business
                 rate.Bets = bets;
             }
             return rates;
+        }
+
+        public void DeleteRate(int rateId)
+        {
+            var bets = _dataAccessLayer.GetBets(rateId);
+            foreach(var bet in bets)
+            {
+                _dataAccessLayer.DeleteBet(bet.Id);
+            }
+            _dataAccessLayer.DeleteRate(rateId);
         }
         #endregion
 
@@ -175,7 +209,20 @@ namespace Business
         }
         #endregion
 
+
+        public string GetAdvertisement()
+        {
+
+            Service1Client client = new Service1Client("BasicHttpBinding_IService1");
+            var stream = client.GetImage();
+            var img = Image.FromStream(stream);
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            img.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            byte[] imgBytes = ms.ToArray();
+            string imgString = Convert.ToBase64String(imgBytes);
+            client.Close();
+            //return String.Format("<img src=\"data:image/jpg;base64,{0}\">", imgString);
+            return imgString;
+        }
     }
 }
-//Service1Client client = new Service1Client();
-//client.GetData();

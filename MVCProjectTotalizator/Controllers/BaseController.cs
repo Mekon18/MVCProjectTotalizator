@@ -17,6 +17,7 @@ namespace MVCProjectTotalizator.Controllers
         }
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            ViewBag.ad = _businessLayer.GetAdvertisement();
             if (User.Identity.IsAuthenticated)
             {
                 ViewBag.Money = _businessLayer.GetUsersMoney(User.Identity.GetUserId());

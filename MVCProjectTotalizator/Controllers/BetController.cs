@@ -17,6 +17,16 @@ namespace MVCProjectTotalizator.Controllers
         {
         }
 
+        [Authorize]
+        public ActionResult MyBets()
+        {
+            var userId = User.Identity.GetUserId();
+            ViewBag.money = _businessLayer.GetUsersMoney(userId);
+
+            var rates = _businessLayer.GetUsersRates(userId);
+            return View(rates);
+        }
+
         // GET: Bet
         [Authorize]
         [HttpGet]
@@ -25,7 +35,7 @@ namespace MVCProjectTotalizator.Controllers
             User.Identity.GetUserId();
             ViewBag.Money = _businessLayer.GetUsersMoney(User.Identity.GetUserId());
             var Event = _businessLayer.GetSportEvent(sportEventId);
-            BetsViewModel betsViewModel = new BetsViewModel() { Bets = new List<Bet>() { new Bet() }, SportEventId = sportEventId, SportEvent = Event };
+            BetsViewModel betsViewModel = new BetsViewModel() { Bets = new List<BetViewModel>() { new BetViewModel() }, SportEventId = sportEventId, SportEvent = Event };
 
             return View(betsViewModel);
         }
@@ -37,11 +47,16 @@ namespace MVCProjectTotalizator.Controllers
             int money = 0;
             foreach (var bet in betsViewModel.Bets)
             {
-                money += bet.Money;
+                money += bet.Bet.Money;
             }
 
             var userId = User.Identity.GetUserId();
             _businessLayer.TakeUsersMoney(userId, money);
+
+            foreach (var bet in betsViewModel.Bets.Where(b => b.Bet.ResultType == "Score"))
+            {
+                bet.Bet.ResultValue = bet.Score1.ToString() + ":" + bet.Score1.ToString();
+            }
 
             var rate = new Rate()
             {
@@ -50,9 +65,60 @@ namespace MVCProjectTotalizator.Controllers
                 UserId = userId
             };
 
-            _businessLayer.SetBets(rate, betsViewModel.Bets);
+            _businessLayer.SetBets(rate, betsViewModel.Bets.Select(x => x.Bet).ToList());
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult EditRate(int rateId, int eventId)
+        {
+            var bets = _businessLayer.GetBets(rateId);
+            var betsmodel = new List<BetViewModel>();
+            for (int i = 0; i < bets.Count; i++)
+            {
+                var model = new BetViewModel() { Bet = bets[i] };
+                if(bets[i].ResultType == "Score")
+                {
+                    var score = bets[i].ResultValue.Split(':');
+                    model.Score1 = int.Parse(score[0]);
+                    model.Score2 = int.Parse(score[1]);
+                }
+                betsmodel.Add(model);
+            }
+            var sportEvent = _businessLayer.GetSportEvent(eventId);
+            BetsViewModel viewModel = new BetsViewModel() { Bets = betsmodel, SportEvent = sportEvent, RateId = rateId };
+            return View(viewModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult EditRate(BetsViewModel viewModel)
+        {
+            viewModel.Bets = viewModel.Bets.Where(b => b.Bet.ResultType != null).ToList();
+            var oldBets = _businessLayer.GetBets(viewModel.RateId);
+            var betsIdToDelete = oldBets.Select(b => b.Id).Except(viewModel.Bets.Select(b => b.Bet.Id));
+            foreach (var betId in betsIdToDelete)
+            {
+                _businessLayer.DeleteBet(betId);
+            }
+            foreach (var bet in viewModel.Bets.Where(b => b.Bet.ResultType == "Score"))
+            {
+                bet.Bet.ResultValue = bet.Score1.ToString() + ":" + bet.Score1.ToString();
+            }
+            var betsToAdd = viewModel.Bets.Where(b => b.Bet.Id == 0).Select(b => b.Bet).ToList();
+            _businessLayer.AddBets(betsToAdd, viewModel.RateId);
+
+            _businessLayer.EditBets(viewModel.Bets.Where(b => b.Bet.Id != 0).Select(b => b.Bet).ToList());
+            return RedirectToAction("MyBets");
+        }
+
+        [Authorize]
+        public ActionResult DeleteRate(int id)
+        {
+            _businessLayer.DeleteRate(id);
+            return RedirectToAction("MyBets");
         }
     }
 }

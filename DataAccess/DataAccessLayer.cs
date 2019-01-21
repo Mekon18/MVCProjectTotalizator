@@ -688,6 +688,43 @@ namespace DataAccess
             }
             return bets;
         }
+
+        public void EditBet(Bet bet)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "EditBet",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", bet.Id);
+                command.Parameters.AddWithValue("@type", bet.ResultType);
+                command.Parameters.AddWithValue("@value", bet.ResultValue);
+                command.Parameters.AddWithValue("@money", bet.Money);
+                command.ExecuteNonQuery();
+            }
+        }
+        
+        public void DeleteBet(int betId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "DeleteBet",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", betId);                
+                command.ExecuteNonQuery();
+            }
+        }
         #endregion
 
         #region Rates
@@ -754,6 +791,23 @@ namespace DataAccess
                 reader.Close();
             }
             return rates;
+        }
+
+        public void DeleteRate(int rateId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectingString))
+            {
+                connection.Open();
+
+                SqlCommand command = new SqlCommand
+                {
+                    CommandText = "DeleteRate",
+                    CommandType = System.Data.CommandType.StoredProcedure,
+                    Connection = connection
+                };
+                command.Parameters.AddWithValue("@Id", rateId);
+                command.ExecuteNonQuery();
+            }
         }
         #endregion
 

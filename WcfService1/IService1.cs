@@ -4,7 +4,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using System.Text;
+using System.Drawing;
+using System.IO;
 
 namespace WcfService1
 {
@@ -18,6 +19,10 @@ namespace WcfService1
 
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
+
+        
+        [OperationContract]
+        Stream GetImage();
 
         // TODO: Add your service operations here
     }

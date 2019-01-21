@@ -1,0 +1,139 @@
+﻿@model MVCProjectTotalizator.Models.BetsViewModel
+
+@{
+    ViewBag.Title = "EditRate";
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("/Scripts/bet-scripts.js")
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.RateId)
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 making-bet">
+                <div id="bets">
+                    @for (int i = 0; i < Model.Bets.Count; i++)
+                    {
+                        <input type="hidden" name="Bets[@i].Id" value="@Model.Bets[i].Bet.Id">
+                        <div id="bet-@i" class="bet" style="margin-top: 5px;">
+                            @switch (Model.Bets[i].Bet.ResultType)
+                            {
+                                case "Team":
+                                    <select onchange="ResultChanged(this)" name="Bets[@i].Bet.ResultType">
+                                        <option value="Team" selected="selected">поставить на команду</option>
+                                        <option value="Score">поставить на счет</option>
+                                        <option value="Amount">поставить на количество голов</option>
+                                    </select>
+                                    if (i != 0)
+                                    {
+                                        <div class="bet-delete" onclick="deleteBet(this)">
+                                            <span id="stick1"></span>
+                                            <span id="stick2"></span>
+                                        </div>
+                                    }
+                                    <div class="bet-body">
+                                        <span class="making-bet">Команда: </span>
+                                        <select onchange="teamChanged(this,@Model.SportEvent.FirstTeam.Id,@Model.SportEvent.SecondTeam.Id,@Model.SportEvent.FirstCoeficient,@Model.SportEvent.SecondCoeficient)" name="Bets[@i].Bet.ResultValue">
+                                            @if (Model.Bets[i].Bet.ResultValue == Model.SportEvent.FirstTeam.Id.ToString())
+                                            {
+                                                <option value="@Model.SportEvent.FirstTeam.Id" selected="selected">@Model.SportEvent.FirstTeam.Name</option>
+                                                <option value="@Model.SportEvent.SecondTeam.Id">@Model.SportEvent.SecondTeam.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@Model.SportEvent.FirstTeam.Id">@Model.SportEvent.FirstTeam.Name</option>
+                                                <option value="@Model.SportEvent.SecondTeam.Id" selected="selected">@Model.SportEvent.SecondTeam.Name</option>
+                                            }
+                                        </select>
+                                        @if (Model.Bets[i].Bet.ResultValue == Model.SportEvent.FirstTeam.Id.ToString())
+                                        {
+                                            <span class="making-bet" id="coefficient-@i">Коэффициент: @Model.SportEvent.FirstCoeficient</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="making-bet" id="coefficient-@i">Коэффициент: @Model.SportEvent.SecondCoeficient</span>
+                                        }
+                                        <br />
+                                        <span class="making-bet">Ставка: </span>
+                                        <input type="number" name="Bets[@i].Bet.Money" class="Money text-box single-line" min="0" max="@int.MaxValue" value="0" required />
+                                        <span id="money-valmsg" class="text-danger field-validation-error" data-valmsg-for="Bets[@i].Bet.Money" data-valmsg-replace="true"></span>
+
+                                        <br />
+                                    </div>
+                                    break;
+
+
+                                case "Score":
+                                    <select onchange="ResultChanged(this)" name="Bets[@i].Bet.ResultType">
+                                        <option value="Team">поставить на команду</option>
+                                        <option value="Score" selected="selected">поставить на счет</option>
+                                        <option value="Amount">поставить на количество голов</option>
+                                    </select>
+                                    if (i != 0)
+                                    {
+                                        <div class="bet-delete" onclick="deleteBet(this)">
+                                            <span id="stick1"></span>
+                                            <span id="stick2"></span>
+                                        </div>
+                                    }
+                                    <div class="bet-body">
+                                        <span class="making-bet">Счет: </span>
+                                        <input id="Result1" type="number" name="Bets[@i].Score1" required min="0" max="300" value="@Model.Bets[i].Score1" />
+                                        <span id="valmsg1" class="text-danger field-validation-error" data-valmsg-for="Bets[@i].Score1" data-valmsg-replace="true"></span>
+                                        <input id="Result2" type="number" name="Bets[@i].Score2" required min="0" max="300" value="@Model.Bets[i].Score2" />
+                                        <span id="valmsg2" class="text-danger field-validation-error" data-valmsg-for="Bets[@i].Score2" data-valmsg-replace="true"></span>
+
+                                        <span class="making-bet" id="coefficient-@i">Коэффициент: @Model.SportEvent.SecondCoeficient</span>
+                                        <br>
+                                        <span class="making-bet">Ставка: </span>
+                                        <input type="number" name="Bets[@i].Bet.Money" class="Money text-box single-line" min="0" max="@int.MaxValue" value="0" required />
+                                        <span id="money-valmsg" class="text-danger field-validation-error" data-valmsg-for="Bets[@i].Bet.Money" data-valmsg-replace="true"></span>
+                                        <br>
+                                    </div>
+                                    break;
+                                case "Amount":
+                                    <select onchange="ResultChanged(this)" name="Bets[@i].Bet.ResultType">
+                                        <option value="Team">поставить на команду</option>
+                                        <option value="Score">поставить на счет</option>
+                                        <option value="Amount" selected="selected">поставить на количество голов</option>
+                                    </select>
+                                    if (i != 0)
+                                    {
+                                        <div class="bet-delete" onclick="deleteBet(this)">
+                                            <span id="stick1"></span>
+                                            <span id="stick2"></span>
+                                        </div>
+                                    }
+                                    <div class="bet-body">
+                                        <span class="making-bet">Количество голов: </span>
+                                        <input id="Result" type="number" name="Bets[@i].Bet.ResultValue">
+                                        <span id="valmsg" class="text-danger field-validation-error" data-valmsg-for="Bets[@i].Bet.ResultValue" data-valmsg-replace="true"></span>
+
+                                        <span class="making-bet" id="coefficient-@i">Коэффициент: @Model.SportEvent.SecondCoeficient</span>
+                                        <br>
+                                        <span class="making-bet">Ставка: </span>
+                                        <input type="number" name="Bets[@i].Bet.Money" class="Money text-box single-line" min="0" max="@int.MaxValue" value="0" required />
+                                        <span id="money-valmsg" class="text-danger field-validation-error" data-valmsg-for="Bets[@i].Bet.Money" data-valmsg-replace="true"></span>
+                                        <br>
+                                    </div>
+                                    break;
+                            }
+                        </div>
+                    }
+                </div>
+
+                <input id="add" type="button" value="Добавить" class="btn btn-default" onclick="AddBet()" />
+                @Html.HiddenFor(m => m.SportEventId)
+                <input id="CreateBtn" type="submit" value="Изменить" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@Html.Partial("BetTemplates", Model.SportEvent)
+

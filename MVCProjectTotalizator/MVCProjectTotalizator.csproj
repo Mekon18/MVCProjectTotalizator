@@ -241,6 +241,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BetsViewModel.cs" />
+    <Compile Include="Models\BetViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -265,6 +266,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\bet-scripts.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -312,7 +314,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Bet\MakeBet.cshtml" />
-    <Content Include="Views\Home\MyBets.cshtml" />
+    <Content Include="Views\Bet\MyBets.cshtml" />
     <Content Include="Views\Event\MakeEvent.cshtml" />
     <Content Include="Views\Team\AddTeam.cshtml" />
     <Content Include="Views\Event\ShowEvents.cshtml" />
@@ -323,6 +325,9 @@
     <Content Include="Views\User\EditUser.cshtml" />
     <Content Include="Views\Home\TopUpBalance.cshtml" />
     <Content Include="Views\Event\Search.cshtml" />
+    <Content Include="Views\Home\GetAdvertisement.cshtml" />
+    <Content Include="Views\Bet\EditRate.cshtml" />
+    <Content Include="Views\Bet\BetTemplates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

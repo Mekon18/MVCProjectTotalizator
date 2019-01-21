@@ -3,126 +3,39 @@
 @{
     ViewBag.Title = "MakeBet";
 }
-<script>
-    function teamChanged(control) {
-        var obj = {
-            FirstTeam: { Id: '@Model.SportEvent.FirstTeam.Id', Coef: @Model.SportEvent.FirstCoeficient.ReplaceSeparator() },
-            SecondTeam: { Id: '@Model.SportEvent.SecondTeam.Id', Coef: @Model.SportEvent.SecondCoeficient.ReplaceSeparator() }
-        };
 
-        var cof;
-        if (obj.FirstTeam.Id == control.value) {
-            cof = obj.FirstTeam.Coef;
-        }
-        else {
-            cof = obj.SecondTeam.Coef;
-        }
-        var t = $(control).parent().parent();
-        var bets = $("#bets").children();
-        var num = bets.index(t);
-        var selector = "#coefficient" + num.toString();
-        var html = "Коэффициент: " + cof;
-        var s = bets.find(selector);;
-        s.html(html);
-    }
-    var n = 0;
-    function AddBet()
-    {
-        n++;
-        var resultSelect = $("#betTemplate").children("select");
-        resultSelect.attr("name", "Bets[" + n.toString() + "].ResultType");
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("/Scripts/bet-scripts.js")
+}
 
-        var betbody = $("#betTemplate").children(".bet-body");
+@*<script>
+    $(document).ready(function () {
+        $('form').on('submit', function (event) {
 
-        var teamSelect = betbody.children("select");
-        teamSelect.attr("name", "Bets[" + n.toString() + "].ResultValue");
+            // adding rules for inputs with class 'comment'
+            $("input.val").each(function () {
+                $(this).rules("add", {
+                    required: true,
+                    //number: true,
+                    //min: 0
+                })
+            });
 
-        var moneyInput = betbody.children("#Bets_" + (n-1).toString() + "__Money");
-        moneyInput.attr("id", "Bets_" + n.toString() + "__Money");
-        moneyInput.attr("name", "Bets[" + n.toString() + "].Money");
+            // prevent default submit action
+            event.preventDefault();
 
+            // test if form is valid
+            if ($('form').validate().form()) {
+                console.log("validates");
+            } else {
+                console.log("does not validate");
+            }
 
-        var validationMessageSpan = betbody.children("[data-valmsg-for*='Bets[" + (n - 1) + "].Money']");
-        validationMessageSpan.attr("data-valmsg-for", "Bets[" + n.toString() + "].Money");
-
-        var coefSpan = betbody.children("#coefficient" + (n - 1));
-        coefSpan.attr("id", "coefficient" + n);
-
-        text = $("#betTemplate").html();
-        $("#bets").append("<div id=\"bet" + n.toString() + "\"style=\"margin-top: 5px;\">" + text + "</div>");
-    }
-
-    function ResultChanged(control) {
-        var t = $(control).parent().find(".bet-body");
-        var bets = $("#bets").children();
-        var num = bets.index(t.parent());
-
-        if (control.value == "Team") {
-            var betbody = $("#betTemplate").children(".bet-body");
-
-            var teamSelect = betbody.children("select");
-            teamSelect.attr("name", "Bets[" + num + "].ResultValue");
-
-            var moneyInput = betbody.children("#Money");
-            moneyInput.attr("name", "Bets[" + num + "].Money");
-
-            text = $("#betTemplate").children(".bet-body").html();
-
-            $(t).replaceWith("<div class=\"bet-body\">" + text + "</div>");
-        }
-        if (control.value == "Score") {
-            var resultInput = $("#ScoreTemplate").children("#Result");
-            resultInput.attr("name", "Bets[" + num + "].ResultValue")
-
-            var moneyInput = $("#ScoreTemplate").children("#Money");
-            moneyInput.attr("name", "Bets[" + num + "].Money");
-
-            var text = $("#ScoreTemplate").html();
-
-            $(t).replaceWith("<div class=\"bet-body\">" + text + "</div>");
-        }
-        if (control.value == "Amount") {
-            var resultInput = $("#AmountTemplate").children("#Result");
-            resultInput.attr("name", "Bets[" + num + "].ResultValue")
-
-            var moneyInput = $("#AmountTemplate").children("#Money");
-            moneyInput.attr("name", "Bets[" + num + "].Money");
-
-            var text = $("#AmountTemplate").html();
-            $(t).replaceWith("<div class=\"bet-body\">" + text + "</div>");
-        }
-    }
-
-    function deleteBet(control) {
-        n--;
-        var bets = $(control).parent().nextAll();
-        for (var i = 0; i < bets.length; i++) {
-            var id = $(bets[i]).attr("id");
-            var num = id[3];
-
-            $(bets[i]).attr("id", "bet" + (+num - 1));
-            $(bets[i]).children("select").attr("name", "Bets[" + (+num - 1) + "].ResultType");
-
-            var betBody = $(bets[i]).children(".bet-body");
-            betBody.children("select").attr("name", "Bets[" + (+num - 1) + "].ResultValue");
-            betBody.children("#Result").attr("name", "Bets[" + (+num - 1) + "].ResultValue");
-            betBody.children("#Money").attr("name", "Bets[" + (+num - 1) + "].Money");
-            betBody.children("#Money").attr("id", "Bets_" + (+num - 1) + "__Money");
-            betBody.children("#coefficient" + num).attr("id", "coefficient" + (+num - 1));
-            betBody.children("[data-valmsg-for*='Bets[" + num + "].Money']").attr("data-valmsg-for", "Bets[" + (+num - 1) + "].Money");
-        }
-        $(control).parent().remove();
-    }
-
-    //$(function () {
-    //    $("#CreateBtn").on("click", function (e) {
-
-    //        e.preventDefault();
-    //        $("form").validate();
-    //    });
-    //});
-
-</script>
+        })
+        //$('form').validate();
+    });
+</script>*@
 
 @using (Html.BeginForm())
 {
@@ -133,96 +46,38 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10 making-bet">
                 <div id="bets">
-                    <div id="bet0">
-                        <select onchange="ResultChanged(this)" name="Bets[0].ResultType">
+                    <div id="bet-0" class="bet">
+                        <select onchange="ResultChanged(this)" name="Bets[0].Bet.ResultType">
                             <option value="Team">поставить на команду</option>
                             <option value="Score">поставить на счет</option>
                             <option value="Amount">поставить на количество голов</option>
                         </select>
                         <div class="bet-body">
                             <span class="making-bet">Команда: </span>
-                            <select onchange="teamChanged(this)" name="Bets[0].ResultValue">
+                            <select name="Bets[0].Bet.ResultValue" onchange="teamChanged(this,@Model.SportEvent.FirstTeam.Id,@Model.SportEvent.SecondTeam.Id,@Model.SportEvent.FirstCoeficient,@Model.SportEvent.SecondCoeficient)" >
                                 <option value="@Model.SportEvent.FirstTeam.Id">@Model.SportEvent.FirstTeam.Name</option>
                                 <option value="@Model.SportEvent.SecondTeam.Id">@Model.SportEvent.SecondTeam.Name</option>
                             </select>
 
-                            <span class="making-bet" id="coefficient0">Коэффициент: @Model.SportEvent.FirstCoeficient</span>
+                            <span class="making-bet" id="coefficient-0">Коэффициент: @Model.SportEvent.FirstCoeficient</span>
                             <br />
                             <span class="making-bet">Ставка: </span>
-                            @Html.EditorFor(m => m.Bets[0].Money)
-                            @Html.ValidationMessageFor(model => model.Bets[0].Money, "", new { @class = "text-danger" })
-                            @*<input type="number" name="money" />*@
+                            <input type="number" name="Bets[0].Bet.Money" min="0" max="@int.MaxValue" value="0" required />
+                            @Html.ValidationMessageFor(model => model.Bets[0].Bet.Money, "", new { @class = "text-danger" })
                             <br />
                         </div>
                     </div>
                 </div>
 
-                <input id="add" type="button" value="Add" class="btn btn-default" onclick="AddBet()" />
+                <input id="add" type="button" value="Добавить" class="btn btn-default" onclick="AddBet()" />
                 @Html.HiddenFor(m => m.SportEventId)
                 @*<input type="hidden" name="sportEventId" value="@Model.SportEvent.Id" />*@
-                <input id="CreateBtn" type="submit" value="Create" class="btn btn-default" />
+                <input id="CreateBtn" type="submit" value="Создать" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
-<div id="betTemplate" style="display:none;">
-    <select onchange="ResultChanged(this)" name="Bets[0].ResultType">
-        <option value="Team">поставить на команду</option>
-        <option value="Score">поставить на счет</option>
-        <option value="Amount">поставить на количество голов</option>
-    </select>
-    <div class="bet-delete" onclick="deleteBet(this)">
-        <span id="stick1"></span>
-        <span id="stick2"></span>
-    </div>
-    <div class="bet-body">
-        <span class="making-bet">Команда: </span>
-        <select onchange="teamChanged(this)" name="Bets[0].ResultValue">
-            <option value="@Model.SportEvent.FirstTeam.Id">@Model.SportEvent.FirstTeam.Name</option>
-            <option value="@Model.SportEvent.SecondTeam.Id">@Model.SportEvent.SecondTeam.Name</option>
-        </select>
+@Html.Partial("BetTemplates", Model.SportEvent)
 
-        <span class="making-bet" id="coefficient0">Коэффициент: @Model.SportEvent.FirstCoeficient</span>
-        <br />
-        <span class="making-bet">Ставка: </span>
-        @*<input class="Money" type="number" name="Bets[0].Money" value="0" data-val="true" data-val-required="Требуется поле Ставка."
-            data-val-range="Поле Ставка должно иметь значение между 0 и 2147483647." data-val-range-max="2147483647"
-            data-val-range-min="0" />*@
-        @Html.EditorFor(model => model.Bets[0].Money)
-        @Html.ValidationMessageFor(model => model.Bets[1].Money, "", new { @class = "text-danger" })
-        <br />
-    </div>
 
-</div>
-
-<div id="ScoreTemplate" style="display:none;">
-    <span class="making-bet">Счет: </span>
-    <input id="Result" type="text" name="Bets[0].ResultValue" />
-
-    <span class="making-bet" id="coefficient0">Коэффициент: @Model.SportEvent.ThirdCoeficient</span>
-    <br />
-    <span class="making-bet">Ставка: </span>
-    <input id="Money" type="number" name="Bets[0].Money" value="0" data-val="true" data-val-required="Требуется поле Ставка."
-           data-val-range="Поле Ставка должно иметь значение между 0 и 2147483647." data-val-range-max="2147483647"
-           data-val-range-min="0" />
-    @Html.ValidationMessageFor(model => model.Bets[0].Money, "", new { @class = "text-danger" })
-    <br />
-</div>
-
-<div id="AmountTemplate" style="display:none;">
-    <span class="making-bet">количество голов: </span>
-    <input id="Result" type="number" name="Bets[0].ResultValue" />
-
-    <span class="making-bet" id="coefficient0">Коэффициент: @Model.SportEvent.FourthCoeficient</span>
-    <br />
-    <span class="making-bet">Ставка: </span>
-    <input id="Money" type="number" name="Bets[0].Money" value="0" data-val="true" data-val-required="Требуется поле Ставка."
-           data-val-range="Поле Ставка должно иметь значение между 0 и 2147483647." data-val-range-max="2147483647"
-           data-val-range-min="0" />
-    @Html.ValidationMessageFor(model => model.Bets[0].Money, "", new { @class = "text-danger" })
-    <br />
-</div>
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

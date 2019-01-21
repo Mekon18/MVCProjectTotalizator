@@ -2,6 +2,17 @@
 @{
     ViewBag.Title = "Мои ставки";
 }
+
+<script>
+    function confirmDelete(id) {
+        var result = confirm("Действительно хотите удалить?");
+        if (result) {
+            $.post("/Bet/DeleteRate/" + id, function () {
+                location.reload();
+            });
+        }
+    }
+</script>
 <div class="dark-table">
     <div class="dark-table-head">Мои ставки</div>
     <table width="100%" class="dark-table">
@@ -44,14 +55,17 @@
                             if (bet.ResultType == "Amount")
                             {
                                 <li>Общее количество забитых голов будет @bet.ResultValue, на это поставлено @bet.Money</li>
-                            }
+                            }                            
                         }
                     </ul>
 
                 </td>
 
                 <td align="center">@r.DateTime.Day.@r.DateTime.Month.@r.DateTime.Year @r.DateTime.Hour:@r.DateTime.Minute.ToString("D2")</td>
-                <td></td>
+                <td>
+                    @Html.ActionLink("Изменить", "EditRate","Bet", new { rateId = r.Id, eventId = r.Event.Id }, new { @class = "btn-sm btn-default" })
+                    <a onclick="confirmDelete(@r.Id)" href="#" class="btn-sm btn-default">Удалить</a>
+                </td>
             </tr>
         }
     </table>

@@ -111,12 +111,16 @@ div.left-part {
     margin: 5px;
 }
 
-div.ad {
+.ad {
     text-align: center;
     background-color: aqua;
     margin-top: 5px;
     margin-bottom: 5px;
     height: 150px;
+}
+img.ad{
+    width:100%;
+    margin:0px;
 }
 
 span.making-bet, label.control-label, h1, h2, h3, h4, h5, h6 {

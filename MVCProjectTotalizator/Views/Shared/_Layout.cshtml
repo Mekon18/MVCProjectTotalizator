@@ -30,7 +30,7 @@
                     @*<li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Мои ставки", "MyBets", "Home")</li>
+                        <li>@Html.ActionLink("Мои ставки", "MyBets", "Bet")</li>
 
                         if (User.IsInAnyRoles("Admin", "Moderator"))
                         {

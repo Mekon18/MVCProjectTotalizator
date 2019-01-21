@@ -1,6 +1,7 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Business
         List<SportEvent> GetNearSportEvents();
         int GetUsersMoney(string id);
         void TakeUsersMoney(string userId, int money);
-        SportEvent GetSportEvent(int id);        
+        SportEvent GetSportEvent(int id);
         void SetBets(Rate rate, List<Bet> bets);
         List<Rate> GetUsersRates(string userId);
         void GiveUserMoney(string id, int money);
@@ -35,5 +36,11 @@ namespace Business
         List<KindOfSport> GetAllKindsOfSport();
         List<SportEvent> GetNearSportEventsByKindOfSport(int kindId);
         List<SportEvent> SearchSportEvents(string status, DateTime date, int kindId);
+        string GetAdvertisement();
+        List<Bet> GetBets(int rateId);
+        void EditBets(List<Bet> bets);
+        void DeleteBet(int betId);
+        void DeleteRate(int rateId);
+        void AddBets(List<Bet> bets, int rateId);
     }
 }

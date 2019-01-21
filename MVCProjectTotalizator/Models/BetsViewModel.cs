@@ -9,8 +9,9 @@ namespace MVCProjectTotalizator.Models
 {
     public class BetsViewModel
     {
-        public List<Bet> Bets { get; set; }
+        public List<BetViewModel> Bets { get; set; }
         public SportEvent SportEvent { get; set; }
         public int SportEventId { get; set; }
+        public int RateId { get; set; }
     }
 }

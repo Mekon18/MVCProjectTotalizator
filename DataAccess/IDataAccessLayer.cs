@@ -36,5 +36,8 @@ namespace DataAccess
         List<KindOfSport> GetAllKindsOfSport();
         List<SportEvent> GetNearSportEventsByKindOfSport(int kindId);
         List<SportEvent> SearchSportEvents(string status, DateTime date, int kindId);
+        void EditBet(Bet bet);
+        void DeleteBet(int betId);
+        void DeleteRate(int rateId);
     }
 }

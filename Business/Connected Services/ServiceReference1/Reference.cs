@@ -89,6 +89,12 @@ namespace Business.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
         System.Threading.Tasks.Task<Business.ServiceReference1.CompositeType> GetDataUsingDataContractAsync(Business.ServiceReference1.CompositeType composite);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetImage", ReplyAction="http://tempuri.org/IService1/GetImageResponse")]
+        System.IO.Stream GetImage();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetImage", ReplyAction="http://tempuri.org/IService1/GetImageResponse")]
+        System.Threading.Tasks.Task<System.IO.Stream> GetImageAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -132,6 +138,14 @@ namespace Business.ServiceReference1 {
         
         public System.Threading.Tasks.Task<Business.ServiceReference1.CompositeType> GetDataUsingDataContractAsync(Business.ServiceReference1.CompositeType composite) {
             return base.Channel.GetDataUsingDataContractAsync(composite);
+        }
+        
+        public System.IO.Stream GetImage() {
+            return base.Channel.GetImage();
+        }
+        
+        public System.Threading.Tasks.Task<System.IO.Stream> GetImageAsync() {
+            return base.Channel.GetImageAsync();
         }
     }
 }

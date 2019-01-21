@@ -1,0 +1,61 @@
+﻿@model Common.SportEvent
+
+<div id="betTemplate" style="display:none;">
+    <select onchange="ResultChanged(this)" name="Bets[0].Bet.ResultType">
+        <option value="Team">поставить на команду</option>
+        <option value="Score">поставить на счет</option>
+        <option value="Amount">поставить на количество голов</option>
+    </select>
+    <div class="bet-delete" onclick="deleteBet(this)">
+        <span id="stick1"></span>
+        <span id="stick2"></span>
+    </div>
+    <div class="bet-body">
+        <span class="making-bet">Команда: </span>
+        <select onchange="teamChanged(this,@Model.FirstTeam.Id,@Model.SecondTeam.Id,@Model.FirstCoeficient,@Model.SecondCoeficient)" name="Bets[0].Bet.ResultValue">
+            <option value="@Model.FirstTeam.Id">@Model.FirstTeam.Name</option>
+            <option value="@Model.SecondTeam.Id">@Model.SecondTeam.Name</option>
+        </select>
+
+        <span class="making-bet" id="coefficient-0">Коэффициент: @Model.FirstCoeficient</span>
+        <br />
+        <span class="making-bet">Ставка: </span>
+        @*<input class="Money" type="number" name="Bets[0].Money" value="0" data-val="true" data-val-required="Требуется поле Ставка."
+        data-val-range="Поле Ставка должно иметь значение между 0 и 2147483647." data-val-range-max="2147483647"
+        data-val-range-min="0" />*@
+        <input type="number" name="Bets[0].Bet.Money" class="Money text-box single-line" min="0" max="@int.MaxValue" value="0" required />
+        <span id="money-valmsg" class="text-danger field-validation-error" data-valmsg-for="Bets[0].Bet.Money" data-valmsg-replace="true"></span>
+        <br />
+    </div>
+
+</div>
+
+<div id="ScoreTemplate" style="display:none;">
+    <span class="making-bet">Счет: </span>
+    @*<input id="Result" type="text" name="Bets[0].ResultValue" required />*@
+    <input id="Result1" type="number" name="Bets[0].Score1" required min="0" max="300" value="0" />
+    <span id="valmsg1" class="text-danger field-validation-error" data-valmsg-for="Bets[0].Score1" data-valmsg-replace="true"></span>
+    <input id="Result2" type="number" name="Bets[0].Score2" required min="0" max="300" value="0" />
+    <span id="valmsg2" class="text-danger field-validation-error" data-valmsg-for="Bets[0].Score2" data-valmsg-replace="true"></span>
+
+
+    <span class="making-bet" id="coefficient-0">Коэффициент: @Model.ThirdCoeficient</span>
+    <br />
+    <span class="making-bet">Ставка: </span>
+    <input type="number" name="Bets[0].Bet.Money" class="Money text-box single-line" min="0" max="@int.MaxValue" value="0" required />
+    <span id="money-valmsg" class="text-danger field-validation-error" data-valmsg-for="Bets[0].Bet.Money" data-valmsg-replace="true"></span>
+    <br />
+</div>
+
+<div id="AmountTemplate" style="display:none;">
+    <span class="making-bet">Количество голов: </span>
+    <input id="Result" type="number" name="Bets[0].Bet.ResultValue" min="0" max="@int.MaxValue" value="0" required />
+    <span class="text-danger field-validation-error" data-valmsg-for="Bets[0].Bet.ResultValue" data-valmsg-replace="true"></span>
+
+    <span class="making-bet" id="coefficient-0">Коэффициент: @Model.FourthCoeficient</span>
+    <br />
+    <span class="making-bet">Ставка: </span>
+    <input type="number" name="Bets[0].Bet.Money" class="Money text-box single-line" min="0" max="@int.MaxValue" value="0" required />
+    <span id="money-valmsg" class="text-danger field-validation-error" data-valmsg-for="Bets[0].Bet.Money" data-valmsg-replace="true"></span>
+    <br />
+</div>

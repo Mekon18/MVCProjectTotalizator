@@ -37,7 +37,8 @@ namespace MVCProjectTotalizator.Controllers
             {
                 events = _businessLayer.GetNearSportEventsByKindOfSport(id ?? default(int));
             }
-            HomeViewModel viewModel = new HomeViewModel() { KindsOfSport = kinds, SportEvents = events };
+            var ad = _businessLayer.GetAdvertisement();
+            HomeViewModel viewModel = new HomeViewModel() { KindsOfSport = kinds, SportEvents = events, Advertisements=new List<string>() { ad} };
             return View(viewModel);
         }
 
@@ -55,20 +56,20 @@ namespace MVCProjectTotalizator.Controllers
             return View();
         }
 
-        public ActionResult MakeBet(SportEvent sportEvent)
-        {
-            return RedirectToAction("MakeBet", "Bet", new { sportEventId = sportEvent.Id });
-        }
+        //public ActionResult MakeBet(SportEvent sportEvent)
+        //{
+        //    return RedirectToAction("MakeBet", "Bet", new { sportEventId = sportEvent.Id });
+        //}
 
-        [Authorize]
-        public ActionResult MyBets()
-        {
-            var userId = User.Identity.GetUserId();
-            ViewBag.money = _businessLayer.GetUsersMoney(userId);
+        //[Authorize]
+        //public ActionResult MyBets()
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    ViewBag.money = _businessLayer.GetUsersMoney(userId);
 
-            var rates = _businessLayer.GetUsersRates(userId);
-            return View(rates);
-        }
+        //    var rates = _businessLayer.GetUsersRates(userId);
+        //    return View(rates);
+        //}
 
         [HttpGet]
         [Authorize]
@@ -86,6 +87,6 @@ namespace MVCProjectTotalizator.Controllers
             var userid = User.Identity.GetUserId();
             _businessLayer.GiveUserMoney(userid, money);
             return RedirectToAction("Index");
-        }
+        }        
     }
 }
